@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             xmlns:shimmer="http://schemas.android.com/apk/res-auto"
+             tools:background="@android:color/black"
+             android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:id="@+id/center"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="60dp"
+            android:layout_weight="9"
+            android:background="@android:color/transparent"
+            android:gravity="top|center_horizontal"
+            android:keepScreenOn="true"
+            android:text="Weather here"
+            android:textColor="#33b5e5"
+            android:textSize="50sp"
+            android:textStyle="bold"/>
+
+        <com.ce.game.screenlocker.view.ShimmerFrameLayout
+            android:id="@+id/shimmer_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            shimmer:duration="2000"
+            >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                >
+
+                <ImageView
+                    android:foregroundGravity="center_vertical"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:scaleType="center"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:src="@drawable/lockscreen_icon_unlock"
+                    />
+                <TextView
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/lock_home_swipe_to_unlock"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    />
+            </LinearLayout>
+
+
+        </com.ce.game.screenlocker.view.ShimmerFrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:padding="10dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|start|bottom"
+
+                android:orientation="horizontal"
+                >
+
+
+                <FrameLayout
+                    android:layout_width="18dp"
+                    android:layout_height="25dp">
+
+                    <ProgressBar
+                        android:id="@+id/battery_indicator"
+                        style="@style/Widget.ProgressBar.Vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        />
+
+                    <ImageView
+                        android:id="@+id/battery_charging"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/lockscreen_icon_charging_higher"
+                        android:visibility="gone"
+                        tools:visibility="visible"
+                        />
+
+                </FrameLayout>
+
+
+                <TextView
+                    android:id="@+id/battery_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:gravity="center"
+                    android:textColor="@android:color/white"
+                    tools:text="battery"
+                    />
+            </LinearLayout>
+
+
+            <ImageView
+                android:id="@+id/unlock_icon"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|bottom"
+                android:src="@drawable/lockscreen_icon_unlock"
+                />
+
+            <ImageView
+                android:id="@+id/camera_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_gravity="right|end|center_vertical"
+                android:paddingLeft="20dp"
+                android:paddingStart="20dp"
+                android:paddingRight="10dp"
+                android:paddingEnd="10dp"
+                android:scaleType="center"
+                android:src="@drawable/lockscreen_icon_camera"
+                />
+        </FrameLayout>
+
+
+    </LinearLayout>
+</FrameLayout>
