@@ -29,7 +29,6 @@ import com.ce.game.screenlocker.common.DU;
 import com.ce.game.screenlocker.common.ViewU;
 import com.ce.game.screenlocker.util.CameraHelper;
 import com.ce.game.screenlocker.util.PhoneStateHelper;
-import com.ce.game.screenlocker.util.StackBlur;
 import com.ce.game.screenlocker.util.SwipeEvent;
 
 
@@ -192,7 +191,6 @@ public class LockView extends FrameLayout {
 //        mLeftItem = ((ViewStub) findViewById(R.id.viewStubLeft)).inflate();
 //        mRightItem = ((ViewStub) findViewById(R.id.viewStubRight)).inflate();
 
-
         mBottomItem = (PinCodeView) findViewById(R.id.password_view);
 
         mBottomViewCover = findViewById(R.id.black_cover);
@@ -207,19 +205,8 @@ public class LockView extends FrameLayout {
                 return false;
             }
         });
-        mCameraIcon = (ImageView) findViewById(R.id.camera_icon);
-        if (!CameraHelper.hasCameraHardware(context))
-            ViewU.hide(mCameraIcon);
-        else
-            mCameraIcon.setOnTouchListener(new OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    DU.sd("touch", "camera");
-                    sActionObject = ActionObject.camera;
-                    ViewU.show(mBottomViewCover);
-                    return false;
-                }
-            });
+
+        setCamera(context);
 
         ViewU.invisible(mTopItem, mBottomItem, mLeftItem, mRightItem);
 
@@ -265,14 +252,31 @@ public class LockView extends FrameLayout {
         mGestureDetector = new GestureDetector(context, swipeWithAnimListener);
     }
 
-    private ShimmerFrameLayout mShimmerContainer;
+    private void setCamera(Context context) {
+        mCameraIcon = (ImageView) findViewById(R.id.camera_icon);
+
+        if (!CameraHelper.hasCameraHardware(context))
+            ViewU.hide(mCameraIcon);
+        else
+            mCameraIcon.setOnTouchListener(new OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    DU.sd("touch", "camera");
+                    sActionObject = ActionObject.camera;
+                    ViewU.show(mBottomViewCover);
+                    return false;
+                }
+            });
+    }
+
+//    private ShimmerFrameLayout mShimmerContainer;
 
     private void setCenterItemDetail() {
         mBatteryIndicator = (ProgressBar) mCenterItem.findViewById(R.id.battery_indicator);
         mBatteryInfo = (TextView) mCenterItem.findViewById(R.id.battery_info);
         mBatteryCharging = (ImageView) mCenterItem.findViewById(R.id.battery_charging);
         mUnlockIcon = (ImageView) mCenterItem.findViewById(R.id.unlock_icon);
-        mShimmerContainer = (ShimmerFrameLayout) mCenterItem.findViewById(R.id.shimmer_container);
+//        mShimmerContainer = (FrameLayout) mCenterItem.findViewById(R.id.shimmer_container);
 
         int batteryPercentage = (int) PhoneStateHelper.getBatteryLevel(mContext);
 
@@ -289,32 +293,27 @@ public class LockView extends FrameLayout {
     }
 
     public void startShimmer() {
-        if (mShimmerContainer != null)
-            mShimmerContainer.startShimmerAnimation();
+//        if (mShimmerContainer != null)
+//            mShimmerContainer.startShimmerAnimation();
     }
 
     public void stopShimmer() {
-        if (mShimmerContainer != null)
-            mShimmerContainer.stopShimmerAnimation();
+//        if (mShimmerContainer != null)
+//            mShimmerContainer.stopShimmerAnimation();
     }
 
-    private void batteryChargingAnim() {
+    public void batteryChargingAnim() {
         if (PhoneStateHelper.isPowerConnected(mContext)) {
             final ObjectAnimator alphaAnimation = ObjectAnimator.ofFloat(mBatteryCharging, View.ALPHA, 0.2f, 1, 1);
             alphaAnimation.setRepeatCount(ValueAnimator.INFINITE);
             alphaAnimation.setRepeatMode(ValueAnimator.REVERSE);
             alphaAnimation.setEvaluator(new FloatEvaluator());
             alphaAnimation.setDuration(1500);
-            alphaAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    if (!PhoneStateHelper.isPowerConnected(mContext))
-                        ViewU.invisible(mBatteryCharging);
-                    else
-                        ViewU.show(mBatteryCharging);
-                }
-            });
             alphaAnimation.start();
+            ViewU.show(mBatteryCharging);
+        } else {
+            ViewU.hide(mBatteryCharging);
+            cancelAnimation(mBatteryCharging);
         }
     }
 
@@ -327,15 +326,6 @@ public class LockView extends FrameLayout {
         alphaAnimator.setRepeatMode(ValueAnimator.REVERSE);
         alphaAnimator.setEvaluator(new FloatEvaluator());
         alphaAnimator.setDuration(1500);
-        alphaAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                if (!PhoneStateHelper.isPowerConnected(mContext))
-                    ViewU.invisible(mBatteryCharging);
-                else
-                    ViewU.show(mBatteryCharging);
-            }
-        });
         alphaAnimator.start();
 
         if (mRollingAnim == null) {
@@ -358,38 +348,22 @@ public class LockView extends FrameLayout {
                 long start = System.currentTimeMillis();
 
                 DU.sd("time take", "1", start);
-                sDefaultBG = getResources().getDrawable(R.drawable.lock_background);
+                Bitmap bgBitmap = BitmapFactory.decodeStream(
+                        mContext.getResources().openRawResource(+R.drawable.lock_background));
+                sDefaultBG = new BitmapDrawable(mContext.getResources(), bgBitmap);
+
                 DU.sd("time take", 2, System.currentTimeMillis() - start);
 
-                BitmapFactory.Options option = new BitmapFactory.Options();
-                option.inJustDecodeBounds = false;
-//                option.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                option.inSampleSize = 2;
-                /*
-                * 8 takes about 140ms on my Mi3
-                * 4 takes about 280ms on my Mi3
-                * 2 takes about 320ms on my Mi3
-                * */
-
-                Bitmap defaultBip = BitmapFactory.decodeResource(getContext().getResources(),
-                        R.drawable.lock_background
-                        , option
-                );
-                DU.sd("time take", 3, System.currentTimeMillis() - start);
-
-
-                if (defaultBip == null) {
-                    DU.sd("exception", "null default");
-                    return;
-                }
-
                 try {
-                    Bitmap blurredBip = StackBlur.blur(defaultBip, 35, false);
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inSampleSize = 8;
+                    Bitmap blurredBip = BitmapFactory.decodeResource(getResources(), R.drawable.lock_background, options);
+
                     DU.sd("time take", 4, System.currentTimeMillis() - start);
 
                     sBlurredBG = new BitmapDrawable(getResources(), blurredBip);
                     DU.sd("time take", 5, System.currentTimeMillis() - start);
-                } catch (OutOfMemoryError out) {
+                } catch (Exception|OutOfMemoryError out) {
                     out.printStackTrace();
                     sBlurredBG = sDefaultBG;
                 }

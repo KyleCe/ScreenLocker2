@@ -27,13 +27,20 @@
             android:textSize="50sp"
             android:textStyle="bold"/>
 
-        <com.ce.game.screenlocker.view.ShimmerFrameLayout
+        <!--<com.ce.game.screenlocker.view.ShimmerFrameLayout-->
+            <!--android:id="@+id/shimmer_container"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_gravity="center"-->
+            <!--shimmer:duration="2000"-->
+            <!--&gt;-->
+        <FrameLayout
             android:id="@+id/shimmer_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:layout_gravity="center"
-            shimmer:duration="2000"
             >
 
             <LinearLayout
@@ -63,8 +70,8 @@
                     />
             </LinearLayout>
 
-
-        </com.ce.game.screenlocker.view.ShimmerFrameLayout>
+        </FrameLayout>
+        <!--</com.ce.game.screenlocker.view.ShimmerFrameLayout>-->
 
         <FrameLayout
             android:layout_width="match_parent"

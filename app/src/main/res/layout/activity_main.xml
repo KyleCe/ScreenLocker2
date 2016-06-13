@@ -19,4 +19,14 @@
         android:layout_gravity="center"
         android:textAllCaps="false"
         />
+
+
+    <Button
+        android:id="@+id/set_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/start_locker"
+        android:layout_gravity="bottom|center_horizontal"
+        android:textAllCaps="false"
+        />
 </FrameLayout>

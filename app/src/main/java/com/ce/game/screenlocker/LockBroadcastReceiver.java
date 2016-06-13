@@ -56,8 +56,10 @@ final public class LockBroadcastReceiver extends BroadcastReceiver {
                 bInterruptSupervisor = true;
                 break;
             case Intent.ACTION_POWER_CONNECTED:
+                LockHelper.INSTANCE.getLockView().batteryChargingAnim();
                 break;
             case Intent.ACTION_POWER_DISCONNECTED:
+                LockHelper.INSTANCE.getLockView().batteryChargingAnim();
                 break;
             case Intent.ACTION_SHUTDOWN:
                 break;
