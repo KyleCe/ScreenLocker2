@@ -432,4 +432,8 @@ public class DU {
 
         return getScheduledExecutor().scheduleAtFixedRate(runnable, delay, period, unit);
     }
+
+    public static long time(){
+        return System.currentTimeMillis();
+    }
 }
