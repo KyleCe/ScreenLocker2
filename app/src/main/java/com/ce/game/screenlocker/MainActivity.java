@@ -27,7 +27,7 @@ public class MainActivity extends Activity {
 
     private void startScreenLockService() {
         Intent intent = new Intent(mContext, LockScreenService.class);
-        intent.setAction("com.ce.game.screenlocker.LocalService");
+        intent.setAction(LockScreenService.class.getPackage().getName() + LockScreenService.class.getSimpleName());
         mContext.startService(intent);
     }
 }

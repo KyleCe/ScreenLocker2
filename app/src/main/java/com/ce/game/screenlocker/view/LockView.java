@@ -278,18 +278,28 @@ public class LockView extends FrameLayout {
         mUnlockIcon = (ImageView) mCenterItem.findViewById(R.id.unlock_icon);
 //        mShimmerContainer = (FrameLayout) mCenterItem.findViewById(R.id.shimmer_container);
 
-        int batteryPercentage = (int) PhoneStateHelper.getBatteryLevel(mContext);
-
-        if (0 <= batteryPercentage && batteryPercentage <= 100)
-            mBatteryIndicator.setProgress(batteryPercentage);
-
-        String info = String.format("%d%%", batteryPercentage);
-        if (DU.notEmpty(info))
-            mBatteryInfo.setText(info);
+        refreshBatteryInfo(mBatteryIndicator, mBatteryInfo);
 
         batteryChargingAnim();
 
         unlockAnim();
+    }
+
+    public void refreshBattery(){
+        refreshBatteryInfo(mBatteryIndicator,mBatteryInfo);
+    }
+
+    private void refreshBatteryInfo(ProgressBar percentage, TextView num) {
+        if (percentage == null || num == null) return;
+
+        int batteryPercentage = (int) PhoneStateHelper.getBatteryLevel(mContext);
+
+        if (0 <= batteryPercentage && batteryPercentage <= 100)
+            percentage.setProgress(batteryPercentage);
+
+        String info = String.format("%d%%", batteryPercentage);
+        if (DU.notEmpty(info))
+            num.setText(info);
     }
 
     public void startShimmer() {

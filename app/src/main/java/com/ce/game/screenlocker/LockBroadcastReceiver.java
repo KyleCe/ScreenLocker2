@@ -13,6 +13,7 @@ import com.ce.game.screenlocker.util.LockHelper;
 
 import java.util.List;
 import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -30,6 +31,8 @@ final public class LockBroadcastReceiver extends BroadcastReceiver {
     private ScheduledThreadPoolExecutor mExecutor;
     private FutureRunnable mSupervisorRunnable;
 
+    private ScheduledFuture<?> mBatteryCheckFuture;
+
     @Override
     public void onReceive(Context context, Intent intent) {
         String mAction = intent.getAction();
@@ -40,6 +43,7 @@ final public class LockBroadcastReceiver extends BroadcastReceiver {
                 LockHelper.INSTANCE.initLockViewInBackground(context);
                 break;
             case Intent.ACTION_SCREEN_ON:
+                refreshBatteryInfo();
                 break;
             case LockHelper.START_SUPERVISE:
                 bInterruptSupervisor = false;
@@ -119,9 +123,26 @@ final public class LockBroadcastReceiver extends BroadcastReceiver {
         mSupervisorRunnable.setFuture(future);
     }
 
+    private void refreshBatteryInfo() {
+        initScheduleExecutor();
+        mBatteryCheckFuture = mExecutor.scheduleAtFixedRate(new BatteryCheckRunnable(), 2, 2, TimeUnit.MINUTES);
+    }
+
+    private class BatteryCheckRunnable implements Runnable {
+        public void run() {
+            LockHelper.INSTANCE.getLockView().refreshBattery();
+
+            if (!LockHelper.INSTANCE.getLockLayer().isbIsLocked())
+                mBatteryCheckFuture.cancel(false);
+        }
+    }
+
     private void initScheduleExecutor() {
         if (mExecutor == null)
-            mExecutor = new ScheduledThreadPoolExecutor(2);
+            synchronized (this) {
+                if (mExecutor == null)
+                    mExecutor = new ScheduledThreadPoolExecutor(2);
+            }
     }
 
     public void shutdownScheduleExecutor() {
