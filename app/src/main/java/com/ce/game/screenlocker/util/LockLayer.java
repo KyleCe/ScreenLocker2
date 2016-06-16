@@ -1,11 +1,15 @@
 package com.ce.game.screenlocker.util;
 
 import android.content.Context;
+import android.graphics.PixelFormat;
+import android.os.Build;
+import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 
 import com.ce.game.screenlocker.common.DU;
+import com.ce.game.screenlocker.common.PhoneOemHelper;
 
 
 /**
@@ -43,18 +47,35 @@ final public class LockLayer {
         bIsLocked = false;
         mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
 
+        int type = 0;
+        if (PhoneOemHelper.notFlyMe()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                type = LayoutParams.TYPE_SYSTEM_ERROR;
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                type = LayoutParams.TYPE_TOAST;
+            } else {
+                type = LayoutParams.TYPE_PHONE;
+            }
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                type = LayoutParams.TYPE_TOAST;
+            } else {
+                type = LayoutParams.TYPE_SYSTEM_ALERT;
+            }
+        }
 
         mLockViewLayoutParams = new LayoutParams();
         mLockViewLayoutParams.width = LayoutParams.MATCH_PARENT;
         mLockViewLayoutParams.height = LayoutParams.MATCH_PARENT;
-        //实现关键
-        mLockViewLayoutParams.type = LayoutParams.TYPE_SYSTEM_ERROR;
-
-        // 此行代码有时在主界面键按下情况下会出现无法显示和退出，暂时去掉，去掉之后按下主界面键会直接返回主界面
+        mLockViewLayoutParams.type = type;
 
         mLockViewLayoutParams.flags = LayoutParams.FLAG_SHOW_WHEN_LOCKED
                 | LayoutParams.FLAG_DISMISS_KEYGUARD
+                | LayoutParams.FLAG_LAYOUT_IN_SCREEN
                 | LayoutParams.FLAG_KEEP_SCREEN_ON;
+        mLockViewLayoutParams.format = PixelFormat.TRANSLUCENT;
+
+        mLockViewLayoutParams.gravity = Gravity.TOP;
 
         mLockViewLayoutParams.alpha = 1f;
         mLockViewLayoutParams.screenOrientation = 1;
@@ -71,9 +92,13 @@ final public class LockLayer {
 
     public synchronized void unlock() {
         if (mWindowManager != null && bIsLocked) {
+            bIsLocked = false;
             removeViewAndExitFullscreen();
         }
-        bIsLocked = false;
+    }
+
+    public synchronized void requestFullScreen() {
+        ScreenModeHelper.requestImmersiveFullScreen(mLockView);
     }
 
     public synchronized void addLockView() {
@@ -113,9 +138,10 @@ final public class LockLayer {
         }
     }
 
-    private void removeViewAndExitFullscreen() {
-        mWindowManager.removeView(mLockView);
+    private synchronized void removeViewAndExitFullscreen() {
+        // order limited, unset must before remove, or problems occur
         ScreenModeHelper.unsetImmersiveFullScreen(mLockView);
+        mWindowManager.removeView(mLockView);
     }
 
     public synchronized void removeLockView() {
@@ -128,7 +154,7 @@ final public class LockLayer {
         mLockView = v;
     }
 
-    public boolean isbIsLocked() {
+    public boolean isLocked() {
         return bIsLocked ? true : false;
     }
 }

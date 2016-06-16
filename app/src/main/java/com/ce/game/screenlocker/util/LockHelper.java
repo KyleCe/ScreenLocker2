@@ -149,6 +149,8 @@ public enum LockHelper implements SwipeEvent {
                     mContext.sendBroadcast(new Intent(LockHelper.STOP_SUPERVISE));
 
                     CameraHelper.refreshImageIfFileExist(mContext);
+
+                    mContext.sendBroadcast(new Intent(CoreIntent.ACTION_SCREEN_LOCKER_UNLOCK));
                     break;
                 default:
                     break;

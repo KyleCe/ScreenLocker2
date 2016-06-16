@@ -1,19 +1,15 @@
 package com.ce.game.screenlocker;
 
-import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera;
 
 import com.ce.game.screenlocker.common.DU;
+import com.ce.game.screenlocker.util.CoreIntent;
 import com.ce.game.screenlocker.util.LockHelper;
 
-import java.util.List;
 import java.util.concurrent.Future;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -31,7 +27,7 @@ final public class LockBroadcastReceiver extends BroadcastReceiver {
     private ScheduledThreadPoolExecutor mExecutor;
     private FutureRunnable mSupervisorRunnable;
 
-    private ScheduledFuture<?> mBatteryCheckFuture;
+    private static final int SCHEDULE_TASK_NUMBER = 3;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -44,6 +40,10 @@ final public class LockBroadcastReceiver extends BroadcastReceiver {
                 break;
             case Intent.ACTION_SCREEN_ON:
                 refreshBatteryInfo();
+                bringLockViewBackTopIfNot();
+                break;
+            case CoreIntent.ACTION_SCREEN_LOCKER_UNLOCK:
+                shutdownScheduleExecutor();
                 break;
             case LockHelper.START_SUPERVISE:
                 bInterruptSupervisor = false;
@@ -123,48 +123,40 @@ final public class LockBroadcastReceiver extends BroadcastReceiver {
         mSupervisorRunnable.setFuture(future);
     }
 
+    private void bringLockViewBackTopIfNot() {
+        initScheduleExecutor();
+        mExecutor.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                LockHelper.INSTANCE.getLockLayer().requestFullScreen();
+            }
+        }, 1000, 1000, TimeUnit.MILLISECONDS);
+    }
+
     private void refreshBatteryInfo() {
         initScheduleExecutor();
-        mBatteryCheckFuture = mExecutor.scheduleAtFixedRate(new BatteryCheckRunnable(), 2, 2, TimeUnit.MINUTES);
+         mExecutor.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                LockHelper.INSTANCE.getLockView().refreshBattery();
+            }
+        }, 2, 2, TimeUnit.MINUTES);
     }
 
-    private class BatteryCheckRunnable implements Runnable {
-        public void run() {
-            LockHelper.INSTANCE.getLockView().refreshBattery();
-
-            if (!LockHelper.INSTANCE.getLockLayer().isbIsLocked())
-                mBatteryCheckFuture.cancel(false);
-        }
-    }
 
     private void initScheduleExecutor() {
         if (mExecutor == null)
             synchronized (this) {
                 if (mExecutor == null)
-                    mExecutor = new ScheduledThreadPoolExecutor(2);
+                    mExecutor = new ScheduledThreadPoolExecutor(SCHEDULE_TASK_NUMBER);
             }
     }
 
-    public void shutdownScheduleExecutor() {
-        if (mExecutor != null)
-            mExecutor.shutdown();
+    public synchronized void shutdownScheduleExecutor() {
+        if (mExecutor == null) return;
+
+        mExecutor.shutdown();
+        mExecutor = null;
     }
 
-    private String topActivityPackageName(Context context) {
-        ComponentName info = getComponentName(context);
-        return info == null ? "" : info.getPackageName();
-    }
-
-    private ComponentName getComponentName(Context context) {
-        ActivityManager am = (ActivityManager) context.getSystemService(Activity.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
-        if (taskInfo == null || taskInfo.size() == 0) return null;
-
-        ComponentName componentInfo = taskInfo.get(0).topActivity;
-
-        // main launcher::: com.blablaapp.launcher/com.blablaapp.launcher.activity.LauncherActivity
-
-        DU.sd("componentInfo", componentInfo, "package::::" + componentInfo.getPackageName());
-        return componentInfo;
-    }
 }

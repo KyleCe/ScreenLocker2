@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
 
+import com.ce.game.screenlocker.util.CoreIntent;
 import com.ce.game.screenlocker.util.LockHelper;
 
 /**
@@ -38,6 +39,7 @@ final public class LockScreenService extends Service {
         filter.addAction(LockHelper.INIT_VIEW_FILTER);
         filter.addAction(LockHelper.SHOW_SCREEN_LOCKER);
         filter.addAction(LockHelper.START_SUPERVISE);
+        filter.addAction(CoreIntent.ACTION_SCREEN_LOCKER_UNLOCK);
 
         mReceiver = new LockBroadcastReceiver();
 

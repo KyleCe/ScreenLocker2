@@ -20,9 +20,11 @@ public class MainActivity extends Activity {
         findViewById(R.id.start_locker).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startScreenLockService();
+
             }
         });
+
+        startScreenLockService();
     }
 
     private void startScreenLockService() {
@@ -30,4 +32,5 @@ public class MainActivity extends Activity {
         intent.setAction(LockScreenService.class.getPackage().getName() + LockScreenService.class.getSimpleName());
         mContext.startService(intent);
     }
+
 }
