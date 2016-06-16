@@ -55,6 +55,9 @@ final public class LockLayer {
         mLockViewLayoutParams.flags = LayoutParams.FLAG_SHOW_WHEN_LOCKED
                 | LayoutParams.FLAG_DISMISS_KEYGUARD
                 | LayoutParams.FLAG_KEEP_SCREEN_ON;
+
+        mLockViewLayoutParams.alpha = 1f;
+        mLockViewLayoutParams.screenOrientation = 1;
     }
 
     public synchronized void lock() {
