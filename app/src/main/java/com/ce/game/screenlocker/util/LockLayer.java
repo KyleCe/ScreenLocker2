@@ -2,14 +2,12 @@ package com.ce.game.screenlocker.util;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
-import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 
 import com.ce.game.screenlocker.common.DU;
-import com.ce.game.screenlocker.common.PhoneOemHelper;
 
 
 /**
@@ -48,21 +46,23 @@ final public class LockLayer {
         mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
 
         int type = 0;
-        if (PhoneOemHelper.notFlyMe()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                type = LayoutParams.TYPE_SYSTEM_ERROR;
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (AboutPhoneHelper.notFlyMe()) {
+            if (AboutPhoneHelper.sdkNoLessThanM()) {
                 type = LayoutParams.TYPE_TOAST;
+            } else if (AboutPhoneHelper.sdkNoLessThan19()) {
+                type = LayoutParams.TYPE_SYSTEM_ERROR;
             } else {
                 type = LayoutParams.TYPE_PHONE;
             }
         } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (AboutPhoneHelper.sdkNoLessThanM()) {
                 type = LayoutParams.TYPE_TOAST;
             } else {
                 type = LayoutParams.TYPE_SYSTEM_ALERT;
             }
         }
+
+        DU.sd("window manager flag", type);
 
         mLockViewLayoutParams = new LayoutParams();
         mLockViewLayoutParams.width = LayoutParams.MATCH_PARENT;
