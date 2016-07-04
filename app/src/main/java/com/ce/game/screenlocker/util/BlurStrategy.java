@@ -1,18 +1,47 @@
 package com.ce.game.screenlocker.util;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+
+import com.ce.game.screenlocker.R;
+import com.ce.game.screenlocker.common.DU;
+
+import junit.framework.Assert;
+
 /**
- * Created by KyleCe on 2016/6/3.
+ * Created by KyleCe on 2016/7/4.
  *
  * @author: KyleCe
  */
+public class BlurStrategy {
+    public static Drawable getBlurBitmap(Context context, Bitmap defaultBip) {
+        Assert.assertNotNull(context);
+        Assert.assertNotNull(defaultBip);
 
-import android.graphics.Bitmap;
+        long start = System.currentTimeMillis();
 
-/**
- * This is blur image class
- * Blur arithmetic is StackBlur
- */
-final public class StackBlur {
+        Drawable sBlurredBG;
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 8;
+        try {
+            Bitmap blurredBip = BitmapFactory.decodeResource(context.getResources(), R.drawable.lock_background, options);
+            blurredBip = blur(defaultBip, 15, false);
+
+            sBlurredBG = new BitmapDrawable(context.getResources(), blurredBip);
+
+            return sBlurredBG;
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+
+            return new BitmapDrawable(context.getResources(), defaultBip);
+        } finally {
+            DU.sd("blur time take", 4, System.currentTimeMillis() - start);
+        }
+    }
 
     private static Bitmap buildBitmap(Bitmap original, boolean canReuseInBitmap) {
         // First we should check the original
@@ -42,7 +71,7 @@ final public class StackBlur {
      * @param canReuseInBitmap Can reuse In original Bitmap
      * @return Image Bitmap
      */
-    public static Bitmap blur(Bitmap original, int radius, boolean canReuseInBitmap) {
+    private static Bitmap blur(Bitmap original, int radius, boolean canReuseInBitmap) {
         // Stack Blur v1.0 from
         // http://www.quasimondo.com/StackBlurForCanvas/StackBlurDemo.html
         //

@@ -27,6 +27,7 @@ import com.ce.game.screenlocker.R;
 import com.ce.game.screenlocker.common.AnimatorU;
 import com.ce.game.screenlocker.common.DU;
 import com.ce.game.screenlocker.common.ViewU;
+import com.ce.game.screenlocker.util.BlurStrategy;
 import com.ce.game.screenlocker.util.CameraHelper;
 import com.ce.game.screenlocker.util.PhoneStateHelper;
 import com.ce.game.screenlocker.util.SwipeEvent;
@@ -357,26 +358,36 @@ public class LockView extends FrameLayout {
 
                 long start = System.currentTimeMillis();
 
-                DU.sd("time take", "1", start);
+                DU.sd("blur time take", "1", start);
                 Bitmap bgBitmap = BitmapFactory.decodeStream(
                         mContext.getResources().openRawResource(+R.drawable.lock_background));
                 sDefaultBG = new BitmapDrawable(mContext.getResources(), bgBitmap);
 
-                DU.sd("time take", 2, System.currentTimeMillis() - start);
+                DU.sd("blur time take", 2, System.currentTimeMillis() - start);
 
-                try {
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inSampleSize = 8;
-                    Bitmap blurredBip = BitmapFactory.decodeResource(getResources(), R.drawable.lock_background, options);
+                BitmapFactory.Options option = new BitmapFactory.Options();
+                option.inJustDecodeBounds = false;
+//                option.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                option.inSampleSize = 2;
+                /*
+                * 8 takes about 140ms on my Mi3
+                * 4 takes about 280ms on my Mi3
+                * 2 takes about 320ms on my Mi3
+                * */
 
-                    DU.sd("time take", 4, System.currentTimeMillis() - start);
+                Bitmap defaultBip = BitmapFactory.decodeResource(getContext().getResources(),
+                        R.drawable.lock_background
+                        , option
+                );
+                DU.sd("blur time take", 3, System.currentTimeMillis() - start);
 
-                    sBlurredBG = new BitmapDrawable(getResources(), blurredBip);
-                    DU.sd("time take", 5, System.currentTimeMillis() - start);
-                } catch (Exception|OutOfMemoryError out) {
-                    out.printStackTrace();
-                    sBlurredBG = sDefaultBG;
+
+                if (defaultBip == null) {
+                    DU.sd("blur exception", "null default");
+                    return;
                 }
+
+                sBlurredBG = BlurStrategy.getBlurBitmap(getContext(), defaultBip);
             }
         });
     }
