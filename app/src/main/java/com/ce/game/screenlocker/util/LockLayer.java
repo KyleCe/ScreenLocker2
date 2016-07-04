@@ -50,7 +50,7 @@ final public class LockLayer {
             if (AboutPhoneHelper.sdkNoLessThanM()) {
                 type = LayoutParams.TYPE_TOAST;
             } else if (AboutPhoneHelper.sdkNoLessThan19()) {
-                type = LayoutParams.TYPE_SYSTEM_ERROR;
+                type = LayoutParams.TYPE_TOAST;
             } else {
                 type = LayoutParams.TYPE_PHONE;
             }
