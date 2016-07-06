@@ -5,10 +5,14 @@
 
     <!--for screen lock password-->
     <dimen name="keyboard_button_text_size">32sp</dimen>
-    <dimen name="keyboard_button_padding">15dp</dimen>
-    <dimen name="keyboard_button_ripple_padding">30dp</dimen>
-    <dimen name="pin_code_round_size">12dp</dimen>
-    <dimen name="pin_code_round_margin">10dp</dimen>
+    <dimen name="keyboard_button_size">68dp</dimen>
+    <dimen name="keyboard_button_padding">0dp</dimen>
+    <dimen name="keyboard_button_ripple_padding">3dp</dimen>
+    <dimen name="pin_code_back_delete_margin">54dp</dimen>
+    <dimen name="pin_code_back_delete_size">25dp</dimen>
+    <dimen name="pin_code_row_gap">20dp</dimen>
+    <dimen name="pin_code_round_size">10dp</dimen>
+    <dimen name="pin_code_round_margin">15dp</dimen>
     <dimen name="light_gray_bar_margin_top">20dp</dimen>
     <dimen name="light_gray_bar_margin_bottom">5dp</dimen>
     <dimen name="light_gray_bar_margin_sides">50dp</dimen>
@@ -17,5 +21,6 @@
     <dimen name="pin_code_elements_margin">5dp</dimen>
     <dimen name="activity_pin_code_padding">20dp</dimen>
     <dimen name="pin_code_logo_margin">30dp</dimen>
-    <dimen name="pin_code_round_top_margin">10dp</dimen>
+    <dimen name="pin_code_round_top_margin_top">13dp</dimen>
+    <dimen name="pin_code_round_top_margin">45dp</dimen>
 </resources>
