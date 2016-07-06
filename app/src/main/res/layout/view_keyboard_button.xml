@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/pin_code_keyboard_button_ripple"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center_vertical"
     android:paddingBottom="@dimen/keyboard_button_padding"
@@ -25,11 +25,10 @@
 
     <ImageView
         android:id="@+id/keyboard_button_imageview"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_width="@dimen/keyboard_button_size"
+        android:layout_height="@dimen/keyboard_button_size"
         android:layout_centerInParent="true"
         android:src="@drawable/unlockscreen_circle"
     />
-    android:visibility="gone"
 
 </com.ce.game.screenlocker.view.RippleView>

@@ -3,208 +3,242 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/pin_code_first_row"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="3">
+        >
 
         <FrameLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_toLeftOf="@+id/first_row_center"
+            android:layout_toStartOf="@+id/first_row_center"
+            >
 
             <com.ce.game.screenlocker.view.KeyboardButtonView
                 android:id="@+id/pin_code_button_1"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/keyboard_button_size"
+                android:layout_height="@dimen/keyboard_button_size"
                 android:layout_gravity="center"
                 app:lp_keyboard_button_text="@string/button1_large_text"/>
         </FrameLayout>
 
         <FrameLayout
-            android:layout_width="0dp"
+            android:id="@+id/first_row_center"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_centerInParent="true"
+            >
 
             <com.ce.game.screenlocker.view.KeyboardButtonView
                 android:id="@+id/pin_code_button_2"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/keyboard_button_size"
+                android:layout_height="@dimen/keyboard_button_size"
                 android:layout_gravity="center"
                 app:lp_keyboard_button_text="@string/button2_large_text"/>
         </FrameLayout>
 
         <FrameLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_marginLeft="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_toEndOf="@+id/first_row_center"
+            android:layout_toRightOf="@+id/first_row_center">
 
             <com.ce.game.screenlocker.view.KeyboardButtonView
                 android:id="@+id/pin_code_button_3"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/keyboard_button_size"
+                android:layout_height="@dimen/keyboard_button_size"
                 android:layout_gravity="center"
                 app:lp_keyboard_button_text="@string/button3_large_text"/>
         </FrameLayout>
 
-    </LinearLayout>
+    </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/pin_code_second_row"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/pin_code_first_row"
-        android:orientation="horizontal"
-        android:weightSum="3">
+        android:layout_marginTop="@dimen/pin_code_row_gap"
+        >
 
         <FrameLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_toLeftOf="@+id/second_row_center"
+            android:layout_toStartOf="@+id/second_row_center"
+            >
 
             <com.ce.game.screenlocker.view.KeyboardButtonView
 
                 android:id="@+id/pin_code_button_4"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/keyboard_button_size"
+                android:layout_height="@dimen/keyboard_button_size"
                 android:layout_gravity="center"
                 app:lp_keyboard_button_text="@string/button4_large_text"/>
         </FrameLayout>
 
         <FrameLayout
-            android:layout_width="0dp"
+            android:id="@+id/second_row_center"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_centerInParent="true"
+            >
 
             <com.ce.game.screenlocker.view.KeyboardButtonView
                 android:id="@+id/pin_code_button_5"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/keyboard_button_size"
+                android:layout_height="@dimen/keyboard_button_size"
                 android:layout_gravity="center"
                 app:lp_keyboard_button_text="@string/button5_large_text"/>
         </FrameLayout>
 
         <FrameLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_marginLeft="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_toEndOf="@+id/second_row_center"
+            android:layout_toRightOf="@+id/second_row_center">
 
             <com.ce.game.screenlocker.view.KeyboardButtonView
                 android:id="@+id/pin_code_button_6"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/keyboard_button_size"
+                android:layout_height="@dimen/keyboard_button_size"
                 android:layout_gravity="center"
                 app:lp_keyboard_button_text="@string/button6_large_text"/>
         </FrameLayout>
 
-    </LinearLayout>
+    </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/pin_code_third_row"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/pin_code_second_row"
-        android:orientation="horizontal"
-        android:weightSum="3">
+        android:layout_marginTop="@dimen/pin_code_row_gap"
+        >
 
         <FrameLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_toLeftOf="@+id/third_row_center"
+            android:layout_toStartOf="@+id/third_row_center"
+            >
 
             <com.ce.game.screenlocker.view.KeyboardButtonView
                 android:id="@+id/pin_code_button_7"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/keyboard_button_size"
+                android:layout_height="@dimen/keyboard_button_size"
                 android:layout_gravity="center"
                 app:lp_keyboard_button_text="@string/button7_large_text"/>
         </FrameLayout>
 
         <FrameLayout
-            android:layout_width="0dp"
+            android:id="@+id/third_row_center"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_centerInParent="true"
+            >
 
             <com.ce.game.screenlocker.view.KeyboardButtonView
                 android:id="@+id/pin_code_button_8"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/keyboard_button_size"
+                android:layout_height="@dimen/keyboard_button_size"
                 android:layout_gravity="center"
                 app:lp_keyboard_button_text="@string/button8_large_text"/>
         </FrameLayout>
 
         <FrameLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_marginLeft="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_toEndOf="@+id/third_row_center"
+            android:layout_toRightOf="@+id/third_row_center">
 
             <com.ce.game.screenlocker.view.KeyboardButtonView
                 android:id="@+id/pin_code_button_9"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/keyboard_button_size"
+                android:layout_height="@dimen/keyboard_button_size"
                 android:layout_gravity="center"
                 app:lp_keyboard_button_text="@string/button9_large_text"/>
         </FrameLayout>
 
-    </LinearLayout>
+    </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/pin_code_fourth_row"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/pin_code_third_row"
-        android:orientation="horizontal"
-        android:weightSum="3">
+        android:layout_marginTop="@dimen/pin_code_row_gap"
+        >
 
         <FrameLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1">
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/pin_code_back_delete_margin"
+            android:layout_marginRight="@dimen/pin_code_back_delete_margin"
+            android:layout_toLeftOf="@+id/forth_row_center"
+            android:layout_toStartOf="@+id/forth_row_center"
+            >
 
             <com.ce.game.screenlocker.view.KeyboardButtonView
                 android:id="@+id/pin_code_button_10"
-                android:layout_width="60dp"
-                android:layout_height="50dp"
+                android:layout_width="@dimen/pin_code_back_delete_size"
+                android:layout_height="@dimen/pin_code_back_delete_size"
                 android:layout_gravity="center"
                 app:lp_keyboard_button_image="@drawable/unlockscreen_icon_return"
                 />
         </FrameLayout>
 
         <FrameLayout
-            android:layout_width="0dp"
+            android:id="@+id/forth_row_center"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_centerInParent="true"
+            >
 
             <com.ce.game.screenlocker.view.KeyboardButtonView
                 android:id="@+id/pin_code_button_0"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/keyboard_button_size"
+                android:layout_height="@dimen/keyboard_button_size"
                 android:layout_gravity="center"
                 app:lp_keyboard_button_text="@string/button11_large_text"/>
         </FrameLayout>
 
         <FrameLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1">
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/pin_code_back_delete_margin"
+            android:layout_marginStart="@dimen/pin_code_back_delete_margin"
+            android:layout_toEndOf="@+id/forth_row_center"
+            android:layout_toRightOf="@+id/forth_row_center">
 
             <com.ce.game.screenlocker.view.KeyboardButtonView
                 android:id="@+id/pin_code_button_clear"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="@dimen/pin_code_back_delete_size"
+                android:layout_height="@dimen/pin_code_back_delete_size"
                 android:layout_gravity="center"
-                android:layout_weight="1"
                 app:lp_keyboard_button_image="@drawable/unlockscreen_icon_delete"
                 />
         </FrameLayout>
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>

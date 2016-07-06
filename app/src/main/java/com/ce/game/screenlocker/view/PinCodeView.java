@@ -30,7 +30,6 @@ public class PinCodeView extends RelativeLayout implements View.OnTouchListener
 
     private static final int DEFAULT_PIN_LENGTH = 4;
 
-    protected TextView mStepTextView;
     protected TextView mPasswordHint;
     protected PinCodeRoundView mPinCodeRoundView;
     protected KeyboardView mKeyboardView;
@@ -94,16 +93,12 @@ public class PinCodeView extends RelativeLayout implements View.OnTouchListener
         mPinCode = "";
         mOldPinCode = "";
 
-        mStepTextView = (TextView) this.findViewById(R.id.pin_code_step_textview);
         mPinCodeRoundView = (PinCodeRoundView) this.findViewById(R.id.pin_code_round_view);
         mPinCodeRoundView.setPinLength(this.getPinLength());
         mPasswordHint = (TextView) this.findViewById(R.id.pin_code_password_hint);
         mPasswordHint.setOnTouchListener(this);
         mKeyboardView = (KeyboardView) this.findViewById(R.id.pin_code_keyboard_view);
         mKeyboardView.setKeyboardButtonClickedListener(this);
-
-        RoundImageView logoImage = ((RoundImageView) findViewById(R.id.pin_code_logo_imageview));
-//        ViewU.show(logoImage);
 
     }
 
