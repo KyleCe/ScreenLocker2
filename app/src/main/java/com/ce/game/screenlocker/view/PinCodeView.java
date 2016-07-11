@@ -2,10 +2,14 @@ package com.ce.game.screenlocker.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -110,8 +114,80 @@ public class PinCodeView extends RelativeLayout implements View.OnTouchListener
 
         if (mPinCodeRoundView != null)
             mPinCodeRoundView.refresh(0);
+
+        if (shouldAnimPinCodeRoundView(mContext.getString(R.string.pin_code_password_incorrect)))
+            initLeftToRightAnimation(mPinCodeRoundView);
     }
 
+    private boolean shouldAnimPinCodeRoundView(String hint) {
+        return !TextUtils.isEmpty(hint) && hint.equals(mContext.getString(R.string.pin_code_password_incorrect));
+    }
+
+    private TranslateAnimation mLeftRightAnimation;
+
+    float mTranslateCellDistance = 0.05f;
+
+    private float[][] mTranAnimPoints = new float[][]{
+            {0, -mTranslateCellDistance},
+            {-mTranslateCellDistance, mTranslateCellDistance},
+            {mTranslateCellDistance, 0}
+    };
+
+    private static final int CELL_DURATION = 123;
+
+    private void initLeftToRightAnimation(final View view) {
+
+        if (mLeftRightAnimation == null) {
+            mLeftRightAnimation = getTranAnim(mTranAnimPoints[0][0], mTranAnimPoints[0][1]);
+            mLeftRightAnimation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+
+                    TranslateAnimation secondAnim = getTranAnim(mTranAnimPoints[1][0], mTranAnimPoints[1][1]);
+                    secondAnim.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            TranslateAnimation thirdAnim = getTranAnim(mTranAnimPoints[2][0], mTranAnimPoints[2][1]);
+                            thirdAnim.setDuration(CELL_DURATION);
+                            view.startAnimation(thirdAnim);
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+                    secondAnim.setDuration(CELL_DURATION << 1);
+                    secondAnim.setInterpolator(new LinearInterpolator());
+                    view.startAnimation(secondAnim);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            mLeftRightAnimation.setDuration(CELL_DURATION);
+        }
+
+        view.startAnimation(mLeftRightAnimation);
+    }
+
+    protected TranslateAnimation getTranAnim(float startX, float startY) {
+        return new TranslateAnimation(Animation.RELATIVE_TO_SELF, startX,
+                Animation.RELATIVE_TO_SELF, startY, Animation.RELATIVE_TO_SELF,
+                0, Animation.RELATIVE_TO_SELF, 0);
+    }
 
     @Override
     public void onKeyboardClick(KeyboardButtonEnum keyboardButtonEnum) {
