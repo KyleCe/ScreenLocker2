@@ -4,11 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="#ffffff"
+    android:background="@android:color/holo_blue_bright"
     tools:context="com.ce.game.screenlocker.MainActivity">
 
     <Button
@@ -19,6 +20,25 @@
         android:layout_gravity="center"
         android:textAllCaps="false"
         />
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_toLeftOf="@+id/first_row_center"
+        android:layout_toStartOf="@+id/first_row_center"
+        android:background="@android:color/holo_green_dark"
+        android:layout_gravity="center_horizontal"
+        >
+
+        <com.ce.game.screenlocker.view.KeyboardButtonView
+            android:id="@+id/pin_code_button_1"
+            android:layout_width="@dimen/keyboard_button_size"
+            android:layout_height="@dimen/keyboard_button_size"
+            android:layout_gravity="center"
+            app:lp_keyboard_button_text="@string/button1_large_text"/>
+    </FrameLayout>
 
 
     <Button
