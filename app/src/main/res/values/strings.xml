@@ -35,6 +35,9 @@
     <string name="pin_code_fingerprint_text">Fingerprint</string>
     <string name="pin_code_fingerprint_success">Fingerprint recognized</string>
     <string name="pin_code_fingerprint_not_recognized">Fingerprint not recognized. Try again</string>
+    <string name="pin_code_retry_after_certain_period">Try again after %s seconds.</string>
+    <string name="pin_code_retry_after_certain_period_one_second">Try again after 1 second.</string>
+
 
     <!--for device admin-->
     <string name="lock_or_open_device_admin_activity">Lock Admin</string>

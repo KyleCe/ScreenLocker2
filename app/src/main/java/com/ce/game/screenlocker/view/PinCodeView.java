@@ -2,6 +2,7 @@ package com.ce.game.screenlocker.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -18,7 +19,6 @@ import com.ce.game.screenlocker.R;
 import com.ce.game.screenlocker.common.DU;
 import com.ce.game.screenlocker.inter.KeyboardButtonClickedListener;
 import com.ce.game.screenlocker.util.KeyboardButtonEnum;
-import com.ce.game.screenlocker.util.LockHelper;
 
 
 /**
@@ -40,7 +40,10 @@ public class PinCodeView extends RelativeLayout implements View.OnTouchListener
     protected ImageView mFingerprintImageView;
     protected TextView mFingerprintTextView;
 
-    protected int mAttempts = 1;
+    protected volatile int mAttemptCount = 0;
+
+    private static final int ATTEMPT_TIMES_ALLOWED = 4;
+
     protected String mPinCode;
 
     protected String mOldPinCode;
@@ -81,7 +84,7 @@ public class PinCodeView extends RelativeLayout implements View.OnTouchListener
     }
 
     public interface UnlockInterface {
-        void onUnlock();
+        void onUnlock(String string);
 
         void onBack();
     }
@@ -104,12 +107,36 @@ public class PinCodeView extends RelativeLayout implements View.OnTouchListener
         mKeyboardView = (KeyboardView) this.findViewById(R.id.pin_code_keyboard_view);
         mKeyboardView.setKeyboardButtonClickedListener(this);
 
+        mCountDownTimer = new CountDownTimer(COUNT_DOWN_MILLISECONDS, COUNT_DOWN_INTERNAL) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                mPasswordHint.setText(
+                        String.format(getResources().getConfiguration().locale,
+                                getResources().getString(millisUntilFinished / 1000 != 1 ?
+                                        R.string.pin_code_retry_after_certain_period :
+                                        R.string.pin_code_retry_after_certain_period_one_second),
+                                millisUntilFinished / 1000));
+            }
+
+            @Override
+            public void onFinish() {
+                mPasswordHint.setText("");
+                mKeyboardView.enableKeyboardButtonClick();
+                mAttemptCount = 0;
+            }
+
+        };
     }
+
+    private CountDownTimer mCountDownTimer;
+    private static final int COUNT_DOWN_MILLISECONDS = 30000;
+    private static final int COUNT_DOWN_INTERNAL = 1000;
 
     public void resetPinCodeAndView() {
         mPinCode = "";
         mOldPinCode = "";
-        if (mPasswordHint != null)
+        if (mPasswordHint != null && mAttemptCount != ATTEMPT_TIMES_ALLOWED)
             mPasswordHint.setText(R.string.pin_code_password_hint);
 
         if (mPinCodeRoundView != null)
@@ -213,16 +240,22 @@ public class PinCodeView extends RelativeLayout implements View.OnTouchListener
     public void onRippleAnimationEnd() {
         // TODO: 2016/5/25 check rule 
         if (mPinCode.length() != getPinLength()) return;
+
+        if (mAttemptCount++ == ATTEMPT_TIMES_ALLOWED) {
+            mKeyboardView.disableKeyboardButtonClick();
+            mCountDownTimer.start();
+        }
+
+        mUnlockRuler.onUnlock(mPinCode);
+
         if (mPinCode.equals("1234")) {
-            mUnlockRuler.onUnlock();
+            mUnlockRuler.onUnlock("1234");
         } else {
             DU.t(mContext, getResources().getString(R.string.pin_code_password_incorrect));
             resetPinCodeAndView();
-            LockHelper.INSTANCE.vibrate(500);
             mPasswordHint.setText(R.string.pin_code_password_incorrect);
         }
     }
-
 
     /**
      */

@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Vibrator;
+import android.text.TextUtils;
 
 import com.ce.game.screenlocker.common.DU;
 import com.ce.game.screenlocker.view.LockView;
@@ -23,7 +24,10 @@ public enum LockHelper implements SwipeEvent {
 
     private static Context mContext;
 
-    private static final int UNLOCK = 830;
+    private final int UNLOCK = 830;
+    private final int UNLOCK_WITH_PASSWORD = 831;
+    private final int SWITCH_TO_GUEST = 345;
+
     public static final String INIT_VIEW_FILTER = "init view";
     public static final String START_SUPERVISE = "start supervise";
     public static final String STOP_SUPERVISE = "stop supervise";
@@ -121,8 +125,12 @@ public enum LockHelper implements SwipeEvent {
 
         mLockView.assignPinCodeRuler(new PinCodeView.UnlockInterface() {
             @Override
-            public void onUnlock() {
-                mHandler.sendEmptyMessage(UNLOCK);
+            public void onUnlock(String password) {
+
+                Message msg = new Message();
+                msg.what = UNLOCK_WITH_PASSWORD;
+                msg.obj = password;
+                mHandler.sendMessage(msg);
             }
 
             @Override
@@ -152,11 +160,39 @@ public enum LockHelper implements SwipeEvent {
 
                     mContext.sendBroadcast(new Intent(CoreIntent.ACTION_SCREEN_LOCKER_UNLOCK));
                     break;
+
+                case UNLOCK_WITH_PASSWORD:
+
+                    if (!(msg.obj instanceof String)) break;
+                    String password = (String) msg.obj;
+                    switchUserIfExistOrAlertUser(password);
+
+                    break;
+
                 default:
                     break;
             }
         }
     };
+
+    private void switchUserIfExistOrAlertUser(String password) {
+        if (TextUtils.isEmpty(password)) {
+            wrong();
+            return;
+        }
+
+        if (!password.equals("1234")) {
+            wrong();
+            return;
+        }
+
+
+    }
+
+    private void wrong() {
+
+    }
+
 
     public static final String INTENT_KEY_WITH_SECURE = "with_secure";
 

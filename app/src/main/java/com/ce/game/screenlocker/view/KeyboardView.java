@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -71,51 +72,68 @@ public class KeyboardView extends RelativeLayout implements View.OnClickListener
         mButtons.add((KeyboardButtonView) view.findViewById(R.id.pin_code_button_10));
         mButtons.add((KeyboardButtonView) view.findViewById(R.id.pin_code_button_clear));
 
-        for(View button : mButtons) {
+        for (View button : mButtons) {
             button.setOnClickListener(this);
         }
     }
 
     @Override
     public void onClick(View v) {
-        if(mKeyboardButtonClickedListener == null) {
+        if (mKeyboardButtonClickedListener == null) {
             return;
         }
 
         int id = v.getId();
-        if(id == R.id.pin_code_button_0) {
+        if (id == R.id.pin_code_button_0) {
             mKeyboardButtonClickedListener.onKeyboardClick(KeyboardButtonEnum.BUTTON_0);
-        } else if(id == R.id.pin_code_button_1) {
+        } else if (id == R.id.pin_code_button_1) {
             mKeyboardButtonClickedListener.onKeyboardClick(KeyboardButtonEnum.BUTTON_1);
-        } else if(id == R.id.pin_code_button_2) {
+        } else if (id == R.id.pin_code_button_2) {
             mKeyboardButtonClickedListener.onKeyboardClick(KeyboardButtonEnum.BUTTON_2);
-        } else if(id == R.id.pin_code_button_3) {
+        } else if (id == R.id.pin_code_button_3) {
             mKeyboardButtonClickedListener.onKeyboardClick(KeyboardButtonEnum.BUTTON_3);
-        } else if(id == R.id.pin_code_button_4) {
+        } else if (id == R.id.pin_code_button_4) {
             mKeyboardButtonClickedListener.onKeyboardClick(KeyboardButtonEnum.BUTTON_4);
-        } else if(id == R.id.pin_code_button_5) {
+        } else if (id == R.id.pin_code_button_5) {
             mKeyboardButtonClickedListener.onKeyboardClick(KeyboardButtonEnum.BUTTON_5);
-        } else if(id == R.id.pin_code_button_6) {
+        } else if (id == R.id.pin_code_button_6) {
             mKeyboardButtonClickedListener.onKeyboardClick(KeyboardButtonEnum.BUTTON_6);
-        } else if(id == R.id.pin_code_button_7) {
+        } else if (id == R.id.pin_code_button_7) {
             mKeyboardButtonClickedListener.onKeyboardClick(KeyboardButtonEnum.BUTTON_7);
-        } else if(id == R.id.pin_code_button_8) {
+        } else if (id == R.id.pin_code_button_8) {
             mKeyboardButtonClickedListener.onKeyboardClick(KeyboardButtonEnum.BUTTON_8);
-        } else if(id == R.id.pin_code_button_9) {
+        } else if (id == R.id.pin_code_button_9) {
             mKeyboardButtonClickedListener.onKeyboardClick(KeyboardButtonEnum.BUTTON_9);
-        } else if(id == R.id.pin_code_button_clear) {
+        } else if (id == R.id.pin_code_button_clear) {
             mKeyboardButtonClickedListener.onKeyboardClick(KeyboardButtonEnum.BUTTON_CLEAR);
-        } else if(id == R.id.pin_code_button_10) {// back
+        } else if (id == R.id.pin_code_button_10) {// back
             mKeyboardButtonClickedListener.onKeyboardClick(KeyboardButtonEnum.BUTTON_BACK);
         }
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if(!mClickEnabled) return true;
+
+        return super.dispatchTouchEvent(ev);
     }
 
     /**
      */
     public void setKeyboardButtonClickedListener(KeyboardButtonClickedListener keyboardButtonClickedListener) {
         this.mKeyboardButtonClickedListener = keyboardButtonClickedListener;
-        for(KeyboardButtonView button : mButtons) {
+        for (KeyboardButtonView button : mButtons) {
             button.setOnRippleAnimationEndListener(mKeyboardButtonClickedListener);
         }
+    }
+
+    private volatile boolean mClickEnabled = true;
+
+    public void disableKeyboardButtonClick() {
+        mClickEnabled = false;
+    }
+
+    public void enableKeyboardButtonClick() {
+        mClickEnabled = true;
     }
 }

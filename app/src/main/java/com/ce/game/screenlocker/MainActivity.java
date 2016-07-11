@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
+import android.widget.Button;
 
 public class MainActivity extends Activity {
 
@@ -25,7 +27,24 @@ public class MainActivity extends Activity {
         });
 
         startScreenLockService();
+
+        final Button button = (Button) findViewById(R.id.set_password);
+
+        mCountDownTimer = new CountDownTimer(30000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                button.setText("remaining " + millisUntilFinished / 1000);
+                //here you can have your logic to set text to edittext
+            }
+
+            public void onFinish() {
+                button.setText("done!");
+            }
+
+        }.start();
     }
+
+    CountDownTimer mCountDownTimer;
 
     private void startScreenLockService() {
         Intent intent = new Intent(mContext, LockScreenService.class);
