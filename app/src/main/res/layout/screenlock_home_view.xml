@@ -101,8 +101,10 @@
 
                     <ImageView
                         android:id="@+id/battery_charging"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:scaleType="fitCenter"
                         android:src="@drawable/lockscreen_icon_charging_higher"
                         android:visibility="gone"
                         tools:visibility="visible"
