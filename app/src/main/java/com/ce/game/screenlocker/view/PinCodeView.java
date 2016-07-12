@@ -15,7 +15,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ce.game.screenlocker.R;
-import com.ce.game.screenlocker.common.DU;
 import com.ce.game.screenlocker.inter.Clickable;
 import com.ce.game.screenlocker.inter.KeyboardButtonClickedListener;
 import com.ce.game.screenlocker.view.KeyboardButtonView.KeyType;
@@ -49,7 +48,7 @@ public class PinCodeView extends RelativeLayout implements View.OnTouchListener
     protected String mOldPinCode;
 
     private boolean isCodeSuccessful = false;
-    private int mPinLength;
+    private volatile int mPinLength;
 
     private UnlockInterface mUnlockRuler;
 
@@ -224,6 +223,9 @@ public class PinCodeView extends RelativeLayout implements View.OnTouchListener
 
     @Override
     public void onRippleAnimationEnd() {
+
+
+
         // TODO: 2016/5/25 check rule 
         if (mPinCode.length() != getPinLength()) return;
 
@@ -234,13 +236,13 @@ public class PinCodeView extends RelativeLayout implements View.OnTouchListener
 
         mUnlockRuler.onUnlock(mPinCode);
 
-        if (mPinCode.equals("1234")) {
-            mUnlockRuler.onUnlock("1234");
-        } else {
-            DU.t(mContext, getResources().getString(R.string.pin_code_password_incorrect));
-            resetPinCodeAndView();
-            mPasswordHint.setText(R.string.pin_code_password_incorrect);
-        }
+//        if (mPinCode.equals("1234")) {
+//            mUnlockRuler.onUnlock("1234");
+//        } else {
+//            DU.t(mContext, getResources().getString(R.string.pin_code_password_incorrect));
+//            resetPinCodeAndView();
+//            mPasswordHint.setText(R.string.pin_code_password_incorrect);
+//        }
     }
 
     /**

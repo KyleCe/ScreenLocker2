@@ -95,52 +95,57 @@ public enum LockHelper implements SwipeEvent {
             }
     }
 
+    private volatile boolean mIsInitialized = false;
 
-    public synchronized void loadLockView(Context context) {
+    public void loadLockView(Context context) {
         mLockView.showLockHome();
 
-        mLockView.assignSwipeEvent(this);
+        if( !mIsInitialized){
+            mLockView.assignSwipeEvent(this);
 
-        mLockView.assignDirectionOperator(new SwipeWithAnimListener.DirectionOperator() {
-            @Override
-            public void up() {
-            }
+            mLockView.assignDirectionOperator(new SwipeWithAnimListener.DirectionOperator() {
+                @Override
+                public void up() {
+                }
 
-            @Override
-            public void down() {
+                @Override
+                public void down() {
 
-            }
+                }
 
-            @Override
-            public void left() {
-                if(!mLockView.leftSlidable()) return;
+                @Override
+                public void left() {
+                    if(!mLockView.leftSlidable()) return;
 
-                mHandler.sendEmptyMessage(UNLOCK);
-            }
+                    mHandler.sendEmptyMessage(UNLOCK);
+                }
 
-            @Override
-            public void right() {
-                if(!mLockView.rightSlidable()) return;
+                @Override
+                public void right() {
+                    if(!mLockView.rightSlidable()) return;
 
-                mHandler.sendEmptyMessage(UNLOCK);
-            }
-        });
+                    mHandler.sendEmptyMessage(UNLOCK);
+                }
+            });
 
-        mLockView.assignPinCodeRuler(new PinCodeView.UnlockInterface() {
-            @Override
-            public void onUnlock(String password) {
+            mLockView.assignPinCodeRuler(new PinCodeView.UnlockInterface() {
+                @Override
+                public void onUnlock(String password) {
 
-                Message msg = new Message();
-                msg.what = UNLOCK_WITH_PASSWORD;
-                msg.obj = password;
-                mHandler.sendMessage(msg);
-            }
+                    Message msg = new Message();
+                    msg.what = UNLOCK_WITH_PASSWORD;
+                    msg.obj = password;
+                    mHandler.sendMessage(msg);
+                }
 
-            @Override
-            public void onBack() {
-                mLockView.switchBackToCenterFromBottom();
-            }
-        });
+                @Override
+                public void onBack() {
+                    mLockView.switchBackToCenterFromBottom();
+                }
+            });
+
+            mIsInitialized = true;
+        }
 
         mLockLayer.lock();
         showLockLayer();
@@ -154,14 +159,7 @@ public enum LockHelper implements SwipeEvent {
                 case UNLOCK:
                     DU.sd("handler", "unlock");
 
-                    mLockLayer.unlock();
-                    mLockView.stopShimmer();
-
-                    mContext.sendBroadcast(new Intent(LockHelper.STOP_SUPERVISE));
-
-                    CameraHelper.refreshImageIfFileExist(mContext);
-
-                    mContext.sendBroadcast(new Intent(CoreIntent.ACTION_SCREEN_LOCKER_UNLOCK));
+                    unlock();
                     break;
 
                 case UNLOCK_WITH_PASSWORD:
@@ -178,6 +176,17 @@ public enum LockHelper implements SwipeEvent {
         }
     };
 
+    private void unlock() {
+        mLockLayer.unlock();
+        mLockView.stopShimmer();
+
+        mContext.sendBroadcast(new Intent(LockHelper.STOP_SUPERVISE));
+
+        CameraHelper.refreshImageIfFileExist(mContext);
+
+        mContext.sendBroadcast(new Intent(CoreIntent.ACTION_SCREEN_LOCKER_UNLOCK));
+    }
+
     private void switchUserIfExistOrAlertUser(String password) {
         if (TextUtils.isEmpty(password)) {
             wrong();
@@ -189,7 +198,11 @@ public enum LockHelper implements SwipeEvent {
             return;
         }
 
-
+        unlockScreenAndResetPinCode();
+    }
+    private void unlockScreenAndResetPinCode() {
+        unlock();
+        mLockView.resetPinCodeView();
     }
 
     private void wrong() {

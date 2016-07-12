@@ -620,7 +620,7 @@ public class LockView extends FrameLayout implements DirectionSlidability {
         }
     }
 
-    private void resetPinCodeView() {
+    public void resetPinCodeView() {
         mBottomItem.resetPinCodeAndView();
     }
 
