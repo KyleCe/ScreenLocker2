@@ -104,7 +104,6 @@ public enum LockHelper implements SwipeEvent {
         mLockView.assignDirectionOperator(new SwipeWithAnimListener.DirectionOperator() {
             @Override
             public void up() {
-
             }
 
             @Override
@@ -114,11 +113,15 @@ public enum LockHelper implements SwipeEvent {
 
             @Override
             public void left() {
+                if(!mLockView.leftSlidable()) return;
+
                 mHandler.sendEmptyMessage(UNLOCK);
             }
 
             @Override
             public void right() {
+                if(!mLockView.rightSlidable()) return;
+
                 mHandler.sendEmptyMessage(UNLOCK);
             }
         });

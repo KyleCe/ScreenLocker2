@@ -27,6 +27,7 @@ import com.ce.game.screenlocker.R;
 import com.ce.game.screenlocker.common.AnimatorU;
 import com.ce.game.screenlocker.common.DU;
 import com.ce.game.screenlocker.common.ViewU;
+import com.ce.game.screenlocker.inter.DirectionSlidability;
 import com.ce.game.screenlocker.util.BlurStrategy;
 import com.ce.game.screenlocker.util.CameraHelper;
 import com.ce.game.screenlocker.util.PhoneStateHelper;
@@ -38,9 +39,9 @@ import com.ce.game.screenlocker.util.SwipeEvent;
  *
  * @author: KyleCe
  */
-public class LockView extends FrameLayout {
+public class LockView extends FrameLayout implements DirectionSlidability {
 
-    private ShowingItem mShowingItem = ShowingItem.center;
+    private volatile ShowingItem mShowingItem = ShowingItem.center;
     private static final int DEFAULT_ANIM_DURATION = 793;
     private GestureDetector mGestureDetector;
 
@@ -131,6 +132,26 @@ public class LockView extends FrameLayout {
         if (mShowingItem != ShowingItem.bottom) return;
 
         animationDelegate(ShowingItem.bottom, OnSwipeListener.Direction.down);
+    }
+
+    @Override
+    public boolean leftSlidable() {
+        return !mShowingItem.equals(ShowingItem.bottom);
+    }
+
+    @Override
+    public boolean rightSlidable() {
+        return !mShowingItem.equals(ShowingItem.bottom);
+    }
+
+    @Override
+    public boolean upSlidable() {
+        return true;
+    }
+
+    @Override
+    public boolean downSlidable() {
+        return true;
     }
 
     enum ShowingItem {
@@ -252,6 +273,7 @@ public class LockView extends FrameLayout {
 
         mGestureDetector = new GestureDetector(context, swipeWithAnimListener);
     }
+
 
     private void setCamera(Context context) {
         mCameraIcon = (ImageView) findViewById(R.id.camera_icon);
