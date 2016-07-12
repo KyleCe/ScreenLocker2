@@ -1,7 +1,7 @@
 package com.ce.game.screenlocker.inter;
 
 
-import com.ce.game.screenlocker.util.KeyboardButtonEnum;
+import com.ce.game.screenlocker.view.KeyboardButtonView;
 
 /**
  * Created by KyleCe on 2016/5/25.
@@ -15,7 +15,7 @@ public interface KeyboardButtonClickedListener {
      * Called before {@link #onRippleAnimationEnd()}.
      * @param keyboardButtonEnum The organized enum of the clicked button
      */
-     void onKeyboardClick(KeyboardButtonEnum keyboardButtonEnum);
+     void onKeyboardClick(@KeyboardButtonView.KeyType int keyboardButtonEnum);
 
     /**
      */

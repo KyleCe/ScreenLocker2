@@ -10,7 +10,7 @@ import android.widget.RelativeLayout;
 
 import com.ce.game.screenlocker.R;
 import com.ce.game.screenlocker.inter.KeyboardButtonClickedListener;
-import com.ce.game.screenlocker.util.KeyboardButtonEnum;
+import com.ce.game.screenlocker.view.KeyboardButtonView.KeyType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,35 +79,47 @@ public class KeyboardView extends RelativeLayout implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        if (mKeyboardButtonClickedListener == null) {
-            return;
-        }
+        if (mKeyboardButtonClickedListener == null) return;
 
-        int id = v.getId();
-        if (id == R.id.pin_code_button_0) {
-            mKeyboardButtonClickedListener.onKeyboardClick(KeyboardButtonEnum.BUTTON_0);
-        } else if (id == R.id.pin_code_button_1) {
-            mKeyboardButtonClickedListener.onKeyboardClick(KeyboardButtonEnum.BUTTON_1);
-        } else if (id == R.id.pin_code_button_2) {
-            mKeyboardButtonClickedListener.onKeyboardClick(KeyboardButtonEnum.BUTTON_2);
-        } else if (id == R.id.pin_code_button_3) {
-            mKeyboardButtonClickedListener.onKeyboardClick(KeyboardButtonEnum.BUTTON_3);
-        } else if (id == R.id.pin_code_button_4) {
-            mKeyboardButtonClickedListener.onKeyboardClick(KeyboardButtonEnum.BUTTON_4);
-        } else if (id == R.id.pin_code_button_5) {
-            mKeyboardButtonClickedListener.onKeyboardClick(KeyboardButtonEnum.BUTTON_5);
-        } else if (id == R.id.pin_code_button_6) {
-            mKeyboardButtonClickedListener.onKeyboardClick(KeyboardButtonEnum.BUTTON_6);
-        } else if (id == R.id.pin_code_button_7) {
-            mKeyboardButtonClickedListener.onKeyboardClick(KeyboardButtonEnum.BUTTON_7);
-        } else if (id == R.id.pin_code_button_8) {
-            mKeyboardButtonClickedListener.onKeyboardClick(KeyboardButtonEnum.BUTTON_8);
-        } else if (id == R.id.pin_code_button_9) {
-            mKeyboardButtonClickedListener.onKeyboardClick(KeyboardButtonEnum.BUTTON_9);
-        } else if (id == R.id.pin_code_button_clear) {
-            mKeyboardButtonClickedListener.onKeyboardClick(KeyboardButtonEnum.BUTTON_CLEAR);
-        } else if (id == R.id.pin_code_button_10) {// back
-            mKeyboardButtonClickedListener.onKeyboardClick(KeyboardButtonEnum.BUTTON_BACK);
+        switch (v.getId()) {
+            case R.id.pin_code_button_0:
+                mKeyboardButtonClickedListener.onKeyboardClick(KeyType.K0);
+                break;
+            case R.id.pin_code_button_1:
+                mKeyboardButtonClickedListener.onKeyboardClick(KeyType.K1);
+                break;
+            case R.id.pin_code_button_2:
+                mKeyboardButtonClickedListener.onKeyboardClick(KeyType.K2);
+                break;
+            case R.id.pin_code_button_3:
+                mKeyboardButtonClickedListener.onKeyboardClick(KeyType.K3);
+                break;
+            case R.id.pin_code_button_4:
+                mKeyboardButtonClickedListener.onKeyboardClick(KeyType.K4);
+                break;
+            case R.id.pin_code_button_5:
+                mKeyboardButtonClickedListener.onKeyboardClick(KeyType.K5);
+                break;
+            case R.id.pin_code_button_6:
+                mKeyboardButtonClickedListener.onKeyboardClick(KeyType.K6);
+                break;
+            case R.id.pin_code_button_7:
+                mKeyboardButtonClickedListener.onKeyboardClick(KeyType.K7);
+                break;
+            case R.id.pin_code_button_8:
+                mKeyboardButtonClickedListener.onKeyboardClick(KeyType.K8);
+                break;
+            case R.id.pin_code_button_9:
+                mKeyboardButtonClickedListener.onKeyboardClick(KeyType.K9);
+                break;
+            case R.id.pin_code_button_clear:
+                mKeyboardButtonClickedListener.onKeyboardClick(KeyType.K_BACKSPACE);
+                break;
+            case R.id.pin_code_button_10:// back
+                mKeyboardButtonClickedListener.onKeyboardClick(KeyType.K_BACK);
+                break;
+            default:
+                break;
         }
     }
 

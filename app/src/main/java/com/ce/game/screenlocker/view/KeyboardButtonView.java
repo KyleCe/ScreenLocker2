@@ -3,6 +3,7 @@ package com.ce.game.screenlocker.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.IntDef;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -27,6 +28,23 @@ public class KeyboardButtonView extends RelativeLayout implements RippleAnimatio
 
     private Context mContext;
     private RippleView mRippleView;
+
+    @IntDef({KeyType.K0, KeyType.K1, KeyType.K2, KeyType.K3, KeyType.K4, KeyType.K5, KeyType.K6
+            , KeyType.K7, KeyType.K8, KeyType.K9, KeyType.K_BACK, KeyType.K_BACKSPACE})
+    public @interface KeyType {
+        int K0 = 0;
+        int K1 = 1;
+        int K2 = 2;
+        int K3 = 3;
+        int K4 = 4;
+        int K5 = 5;
+        int K6 = 6;
+        int K7 = 7;
+        int K8 = 8;
+        int K9 = 9;
+        int K_BACK = -2;
+        int K_BACKSPACE = -1;
+    }
 
     public KeyboardButtonView(Context context) {
         this(context, null);

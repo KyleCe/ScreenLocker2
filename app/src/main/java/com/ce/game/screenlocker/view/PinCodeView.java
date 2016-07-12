@@ -18,7 +18,7 @@ import android.widget.TextView;
 import com.ce.game.screenlocker.R;
 import com.ce.game.screenlocker.common.DU;
 import com.ce.game.screenlocker.inter.KeyboardButtonClickedListener;
-import com.ce.game.screenlocker.util.KeyboardButtonEnum;
+import com.ce.game.screenlocker.view.KeyboardButtonView.KeyType;
 
 
 /**
@@ -217,23 +217,13 @@ public class PinCodeView extends RelativeLayout implements View.OnTouchListener
     }
 
     @Override
-    public void onKeyboardClick(KeyboardButtonEnum keyboardButtonEnum) {
-        if (mPinCode.length() < this.getPinLength()) {
-            int value = keyboardButtonEnum.getButtonValue();
+    public void onKeyboardClick(@KeyType int keyType) {
+        if (mPinCode.length() >= this.getPinLength()) return;
 
-            if (value == KeyboardButtonEnum.BUTTON_CLEAR.getButtonValue()) {
-                if (!mPinCode.isEmpty()) {
-                    setPinCode(mPinCode.substring(0, mPinCode.length() - 1));
-                } else {
-                    setPinCode("");
-                }
-            } else if (value == KeyboardButtonEnum.BUTTON_BACK.getButtonValue()) {
-                // go back
-                mUnlockRuler.onBack();
-            } else {
-                setPinCode(mPinCode + value);
-            }
-        }
+        if (keyType == KeyType.K_BACKSPACE)
+            setPinCode(!mPinCode.isEmpty() ? mPinCode.substring(0, mPinCode.length() - 1) : "");
+        else if (keyType == KeyType.K_BACK) mUnlockRuler.onBack();
+        else setPinCode(mPinCode + keyType);
     }
 
     @Override
