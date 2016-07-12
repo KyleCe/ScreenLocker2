@@ -6,5 +6,5 @@ package com.ce.game.screenlocker.inter;
  * @author: KyleCe
  */
 public interface Clickable {
-    boolean onClickable();
+    boolean clickable();
 }

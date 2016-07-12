@@ -1,7 +1,6 @@
 package com.ce.game.screenlocker.view;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -9,6 +8,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.ce.game.screenlocker.R;
+import com.ce.game.screenlocker.inter.Clickable;
 import com.ce.game.screenlocker.inter.KeyboardButtonClickedListener;
 import com.ce.game.screenlocker.view.KeyboardButtonView.KeyType;
 
@@ -27,6 +27,9 @@ public class KeyboardView extends RelativeLayout implements View.OnClickListener
 
     private List<KeyboardButtonView> mButtons;
 
+    private Clickable mClickableController;
+
+
     public KeyboardView(Context context) {
         this(context, null);
     }
@@ -39,13 +42,11 @@ public class KeyboardView extends RelativeLayout implements View.OnClickListener
         super(context, attrs, defStyleAttr);
 
         this.mContext = context;
-        initializeView(attrs, defStyleAttr);
+        initializeView();
     }
 
-    private void initializeView(AttributeSet attrs, int defStyleAttr) {
-        if (attrs != null && !isInEditMode()) {
-            final TypedArray attributes = mContext.getTheme().obtainStyledAttributes(attrs, R.styleable.PinCodeView,
-                    defStyleAttr, 0);
+    private void initializeView() {
+        if (!isInEditMode()) {
 
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             KeyboardView view = (KeyboardView) inflater.inflate(R.layout.view_keyboard, this);
@@ -53,6 +54,11 @@ public class KeyboardView extends RelativeLayout implements View.OnClickListener
             initKeyboardButtons(view);
         }
     }
+
+    public void assignClickableController(Clickable clickable) {
+        mClickableController = clickable;
+    }
+
 
     /**
      * Init the keyboard buttons (onClickListener)
@@ -79,7 +85,7 @@ public class KeyboardView extends RelativeLayout implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        if (mKeyboardButtonClickedListener == null) return;
+        if (mKeyboardButtonClickedListener == null ) return;
 
         switch (v.getId()) {
             case R.id.pin_code_button_0:
@@ -125,11 +131,16 @@ public class KeyboardView extends RelativeLayout implements View.OnClickListener
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        if(!mClickEnabled) return true;
+        if (isViewUnClickable()) return true;
 
         return super.dispatchTouchEvent(ev);
+
+//        return true;
     }
 
+    private boolean isViewUnClickable() {
+        return mClickableController != null && !mClickableController.clickable();
+    }
     /**
      */
     public void setKeyboardButtonClickedListener(KeyboardButtonClickedListener keyboardButtonClickedListener) {
@@ -139,13 +150,4 @@ public class KeyboardView extends RelativeLayout implements View.OnClickListener
         }
     }
 
-    private volatile boolean mClickEnabled = true;
-
-    public void disableKeyboardButtonClick() {
-        mClickEnabled = false;
-    }
-
-    public void enableKeyboardButtonClick() {
-        mClickEnabled = true;
-    }
 }

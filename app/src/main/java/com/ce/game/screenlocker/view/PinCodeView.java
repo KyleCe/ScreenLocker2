@@ -1,7 +1,6 @@
 package com.ce.game.screenlocker.view;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -17,6 +16,7 @@ import android.widget.TextView;
 
 import com.ce.game.screenlocker.R;
 import com.ce.game.screenlocker.common.DU;
+import com.ce.game.screenlocker.inter.Clickable;
 import com.ce.game.screenlocker.inter.KeyboardButtonClickedListener;
 import com.ce.game.screenlocker.view.KeyboardButtonView.KeyType;
 
@@ -27,7 +27,7 @@ import com.ce.game.screenlocker.view.KeyboardButtonView.KeyType;
  * @author: KyleCe
  */
 public class PinCodeView extends RelativeLayout implements View.OnTouchListener
-        , KeyboardButtonClickedListener {
+        , KeyboardButtonClickedListener,Clickable {
 
     private Context mContext;
 
@@ -53,6 +53,8 @@ public class PinCodeView extends RelativeLayout implements View.OnTouchListener
 
     private UnlockInterface mUnlockRuler;
 
+    private volatile boolean mClickable = true;
+
     public PinCodeView(Context context) {
         this(context, null);
     }
@@ -65,22 +67,15 @@ public class PinCodeView extends RelativeLayout implements View.OnTouchListener
         super(context, attrs, defStyleAttr);
 
         this.mContext = context.getApplicationContext();
-        initializeView(attrs, defStyleAttr);
+        initializeView();
     }
 
-    private void initializeView(AttributeSet attrs, int defStyleAttr) {
-        if (attrs != null) {
-            final TypedArray attributes = mContext.getTheme().obtainStyledAttributes(attrs, R.styleable.PinCodeView,
-                    defStyleAttr, 0);
+    private void initializeView() {
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//            LinearLayout view = (LinearLayout) inflater.inflate(R.layout.password_pin_code, this);
+        inflater.inflate(R.layout.password_pin_code, this);
 
-
-            inflater.inflate(R.layout.password_pin_code, this);
-
-            setUpView();
-        }
+        setUpView();
     }
 
     public interface UnlockInterface {
@@ -106,6 +101,7 @@ public class PinCodeView extends RelativeLayout implements View.OnTouchListener
         mPasswordHint.setOnTouchListener(this);
         mKeyboardView = (KeyboardView) this.findViewById(R.id.pin_code_keyboard_view);
         mKeyboardView.setKeyboardButtonClickedListener(this);
+        ((KeyboardView) this.findViewById(R.id.pin_code_keyboard_view)).assignClickableController(this);
 
         mCountDownTimer = new CountDownTimer(COUNT_DOWN_MILLISECONDS, COUNT_DOWN_INTERNAL) {
 
@@ -122,7 +118,7 @@ public class PinCodeView extends RelativeLayout implements View.OnTouchListener
             @Override
             public void onFinish() {
                 mPasswordHint.setText("");
-                mKeyboardView.enableKeyboardButtonClick();
+                mClickable = true;
                 mAttemptCount = 0;
             }
 
@@ -232,7 +228,7 @@ public class PinCodeView extends RelativeLayout implements View.OnTouchListener
         if (mPinCode.length() != getPinLength()) return;
 
         if (mAttemptCount++ == ATTEMPT_TIMES_ALLOWED) {
-            mKeyboardView.disableKeyboardButtonClick();
+            mClickable = false;
             mCountDownTimer.start();
         }
 
@@ -273,4 +269,8 @@ public class PinCodeView extends RelativeLayout implements View.OnTouchListener
         return mPinLength;
     }
 
+    @Override
+    public boolean clickable() {
+        return mClickable;
+    }
 }
