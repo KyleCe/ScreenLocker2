@@ -1,102 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             xmlns:shimmer="http://schemas.android.com/apk/res-auto"
-             tools:background="@android:color/black"
-             android:orientation="vertical">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:shimmer="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:background="@android:color/black">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/center"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:layout_height="0dp"
+        android:layout_marginTop="60dp"
+        android:layout_weight="9"
+        android:background="@android:color/transparent"
+        android:gravity="top|center_horizontal"
+        android:keepScreenOn="true"
+        android:text="Weather here"
+        android:textColor="#33b5e5"
+        android:textSize="50sp"
+        android:textStyle="bold"/>
+
+    <!--<com.ce.game.screenlocker.view.ShimmerFrameLayout-->
+    <!--android:id="@+id/shimmer_container"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:layout_gravity="center"-->
+    <!--shimmer:duration="2000"-->
+    <!--&gt;-->
+    <FrameLayout
+        android:id="@+id/shimmer_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_weight="1"
         >
 
-        <TextView
-            android:id="@+id/center"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="60dp"
-            android:layout_weight="9"
-            android:background="@android:color/transparent"
-            android:gravity="top|center_horizontal"
-            android:keepScreenOn="true"
-            android:text="Weather here"
-            android:textColor="#33b5e5"
-            android:textSize="50sp"
-            android:textStyle="bold"/>
-
-        <!--<com.ce.game.screenlocker.view.ShimmerFrameLayout-->
-            <!--android:id="@+id/shimmer_container"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="0dp"-->
-            <!--android:layout_weight="1"-->
-            <!--android:layout_gravity="center"-->
-            <!--shimmer:duration="2000"-->
-            <!--&gt;-->
-        <FrameLayout
-            android:id="@+id/shimmer_container"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
+            android:orientation="horizontal"
             >
 
-            <LinearLayout
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:orientation="horizontal"
-                >
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:text="@string/lock_home_swipe_to_unlock"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                />
+        </LinearLayout>
 
-                <ImageView
-                    android:foregroundGravity="center_vertical"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:scaleType="center"
-                    android:layout_gravity="center_horizontal|center_vertical"
-                    android:src="@drawable/lockscreen_icon_unlock"
-                    />
-                <TextView
-                    android:layout_marginLeft="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="@string/lock_home_swipe_to_unlock"
-                    android:textColor="@android:color/white"
-                    android:textSize="20sp"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    />
-            </LinearLayout>
+    </FrameLayout>
+    <!--</com.ce.game.screenlocker.view.ShimmerFrameLayout>-->
 
-        </FrameLayout>
-        <!--</com.ce.game.screenlocker.view.ShimmerFrameLayout>-->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginBottom="10dp"
+        android:padding="10dp"
+        >
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:padding="10dp">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|start|center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:orientation="horizontal"
+            >
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left|start|bottom"
-
-                android:orientation="horizontal"
+                android:layout_width="13dp"
+                android:layout_height="17dp"
+                android:orientation="vertical"
+                tools:background="@android:color/holo_blue_bright"
                 >
 
+                <View
+                    android:id="@+id/unlock_battery_positive_terminal"
+                    android:layout_width="6dp"
+                    android:layout_height="2dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@color/unlock_screen_battery_background_color"
+                    tools:background="@android:color/holo_red_dark"
+                    />
 
                 <FrameLayout
-                    android:layout_width="18dp"
-                    android:layout_height="25dp">
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
                     <ProgressBar
                         android:id="@+id/battery_indicator"
                         style="@style/Widget.ProgressBar.Vertical"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        tools:background="@android:color/holo_green_dark"
                         />
 
                     <ImageView
@@ -109,46 +114,44 @@
                         android:visibility="gone"
                         tools:visibility="visible"
                         />
-
                 </FrameLayout>
-
-
-                <TextView
-                    android:id="@+id/battery_info"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginStart="5dp"
-                    android:gravity="center"
-                    android:textColor="@android:color/white"
-                    tools:text="battery"
-                    />
             </LinearLayout>
 
 
-            <ImageView
-                android:id="@+id/unlock_icon"
-                android:layout_width="30dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|bottom"
-                android:src="@drawable/lockscreen_icon_unlock"
-                />
-
-            <ImageView
-                android:id="@+id/camera_icon"
+            <TextView
+                android:id="@+id/battery_info"
                 android:layout_width="wrap_content"
-                android:layout_height="35dp"
-                android:layout_gravity="right|end|center_vertical"
-                android:paddingLeft="20dp"
-                android:paddingStart="20dp"
-                android:paddingRight="10dp"
-                android:paddingEnd="10dp"
-                android:scaleType="center"
-                android:src="@drawable/lockscreen_icon_camera"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                tools:text="battery"
                 />
-        </FrameLayout>
+        </LinearLayout>
 
 
-    </LinearLayout>
-</FrameLayout>
+        <ImageView
+            android:id="@+id/unlock_icon"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:src="@drawable/lockscreen_icon_unlock"
+            />
+
+        <ImageView
+            android:id="@+id/camera_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_gravity="right|end|center_vertical"
+            android:paddingEnd="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="10dp"
+            android:paddingStart="20dp"
+            android:scaleType="center"
+            android:src="@drawable/lockscreen_icon_camera"
+            />
+    </FrameLayout>
+
+</LinearLayout>

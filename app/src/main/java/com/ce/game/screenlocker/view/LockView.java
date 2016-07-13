@@ -7,6 +7,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -294,12 +295,16 @@ public class LockView extends FrameLayout implements DirectionSlidability {
 
 //    private ShimmerFrameLayout mShimmerContainer;
 
+    private View mBatteryChargePositive;
+
     private void setCenterItemDetail() {
         mBatteryIndicator = (ProgressBar) mCenterItem.findViewById(R.id.battery_indicator);
         mBatteryInfo = (TextView) mCenterItem.findViewById(R.id.battery_info);
         mBatteryCharging = (ImageView) mCenterItem.findViewById(R.id.battery_charging);
         mUnlockIcon = (ImageView) mCenterItem.findViewById(R.id.unlock_icon);
 //        mShimmerContainer = (FrameLayout) mCenterItem.findViewById(R.id.shimmer_container);
+
+        mBatteryChargePositive = findViewById(R.id.unlock_battery_positive_terminal);
 
         refreshBatteryInfo(mBatteryIndicator, mBatteryInfo);
 
@@ -308,8 +313,8 @@ public class LockView extends FrameLayout implements DirectionSlidability {
         unlockAnim();
     }
 
-    public void refreshBattery(){
-        refreshBatteryInfo(mBatteryIndicator,mBatteryInfo);
+    public void refreshBattery() {
+        refreshBatteryInfo(mBatteryIndicator, mBatteryInfo);
     }
 
     private void refreshBatteryInfo(ProgressBar percentage, TextView num) {
@@ -317,8 +322,13 @@ public class LockView extends FrameLayout implements DirectionSlidability {
 
         int batteryPercentage = (int) PhoneStateHelper.getBatteryLevel(mContext);
 
+        batteryPercentage = 50;
+
         if (0 <= batteryPercentage && batteryPercentage <= 100)
             percentage.setProgress(batteryPercentage);
+
+        mBatteryChargePositive.setBackgroundColor(batteryPercentage == 100 ?
+                Color.WHITE : getContext().getResources().getColor(R.color.unlock_screen_battery_background_color));
 
         String info = String.format("%d%%", batteryPercentage);
         if (DU.notEmpty(info))
