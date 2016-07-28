@@ -8,7 +8,6 @@ import android.os.Message;
 import android.os.Vibrator;
 import android.text.TextUtils;
 
-import com.ce.game.screenlocker.common.DU;
 import com.ce.game.screenlocker.view.LockView;
 import com.ce.game.screenlocker.view.PinCodeView;
 import com.ce.game.screenlocker.view.SwipeWithAnimListener;

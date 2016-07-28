@@ -8,7 +8,6 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 
-import com.ce.game.screenlocker.common.DU;
 import com.ce.game.screenlocker.common.TimeU;
 
 import java.io.File;

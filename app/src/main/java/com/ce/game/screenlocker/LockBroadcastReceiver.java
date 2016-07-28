@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera;
 
-import com.ce.game.screenlocker.common.DU;
+import com.ce.game.screenlocker.util.DU;
 import com.ce.game.screenlocker.util.CoreIntent;
 import com.ce.game.screenlocker.util.LockHelper;
 

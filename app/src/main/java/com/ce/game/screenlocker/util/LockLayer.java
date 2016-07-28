@@ -7,8 +7,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 
-import com.ce.game.screenlocker.common.DU;
-
 
 /**
  * Created by KyleCe on 2016/5/25.

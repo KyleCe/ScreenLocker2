@@ -7,7 +7,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 import com.ce.game.screenlocker.R;
-import com.ce.game.screenlocker.common.DU;
 
 import junit.framework.Assert;
 
@@ -17,6 +16,20 @@ import junit.framework.Assert;
  * @author: KyleCe
  */
 public class BlurStrategy {
+    private static final int DEFAULT_BLUR_RADIUS = 15;
+
+    public static Bitmap getBlurBitmapReturnDefaultIfFail(Bitmap defaultBip) {
+        Assert.assertNotNull(defaultBip);
+
+        try {
+            Bitmap blurred = blur(defaultBip, DEFAULT_BLUR_RADIUS, false);
+            return blurred;
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+            return defaultBip;
+        }
+    }
+
     public static Drawable getBlurBitmap(Context context, Bitmap defaultBip) {
         Assert.assertNotNull(context);
         Assert.assertNotNull(defaultBip);

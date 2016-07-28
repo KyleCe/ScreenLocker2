@@ -1,7 +1,7 @@
 package com.ce.game.screenlocker.view;
 
 
-import com.ce.game.screenlocker.common.DU;
+import com.ce.game.screenlocker.util.DU;
 
 /**
  * Created by KyleCe on 2016/5/23.

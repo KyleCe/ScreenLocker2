@@ -7,6 +7,8 @@ import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
 
+import com.ce.game.screenlocker.util.DU;
+
 
 /**
  * Created by KyleCe on 2015/9/24.

@@ -26,11 +26,11 @@ import android.widget.TextView;
 
 import com.ce.game.screenlocker.R;
 import com.ce.game.screenlocker.common.AnimatorU;
-import com.ce.game.screenlocker.common.DU;
 import com.ce.game.screenlocker.common.ViewU;
 import com.ce.game.screenlocker.inter.DirectionSlidability;
-import com.ce.game.screenlocker.util.BlurStrategy;
 import com.ce.game.screenlocker.util.CameraHelper;
+import com.ce.game.screenlocker.util.DU;
+import com.ce.game.screenlocker.util.LockAffairs;
 import com.ce.game.screenlocker.util.PhoneStateHelper;
 import com.ce.game.screenlocker.util.SwipeEvent;
 
@@ -386,40 +386,19 @@ public class LockView extends FrameLayout implements DirectionSlidability {
         DU.execute(new Runnable() {
             @Override
             public void run() {
-                Process.setThreadPriority(Process.THREAD_PRIORITY_MORE_FAVORABLE);
+                              Process.setThreadPriority(Process.THREAD_PRIORITY_MORE_FAVORABLE);
 
-                long start = System.currentTimeMillis();
+                LockAffairs affairs = new LockAffairs();
 
-                DU.sd("blur time take", "1", start);
-                Bitmap bgBitmap = BitmapFactory.decodeStream(
-                        mContext.getResources().openRawResource(+R.drawable.lock_background));
-                sDefaultBG = new BitmapDrawable(mContext.getResources(), bgBitmap);
+                Bitmap toSetBg = affairs.parseCustomBackground(mContext);
 
-                DU.sd("blur time take", 2, System.currentTimeMillis() - start);
+                if (toSetBg == null)
+                    toSetBg = BitmapFactory.decodeStream(
+                            mContext.getResources().openRawResource(+R.drawable.general_bg));
 
-                BitmapFactory.Options option = new BitmapFactory.Options();
-                option.inJustDecodeBounds = false;
-//                option.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                option.inSampleSize = 2;
-                /*
-                * 8 takes about 140ms on my Mi3
-                * 4 takes about 280ms on my Mi3
-                * 2 takes about 320ms on my Mi3
-                * */
+                sDefaultBG = new BitmapDrawable(mContext.getResources(), toSetBg);
 
-                Bitmap defaultBip = BitmapFactory.decodeResource(getContext().getResources(),
-                        R.drawable.lock_background
-                        , option
-                );
-                DU.sd("blur time take", 3, System.currentTimeMillis() - start);
-
-
-                if (defaultBip == null) {
-                    DU.sd("blur exception", "null default");
-                    return;
-                }
-
-                sBlurredBG = BlurStrategy.getBlurBitmap(getContext(), defaultBip);
+                sBlurredBG = affairs.generateBlurredDrawable(mContext, toSetBg);
             }
         });
     }
