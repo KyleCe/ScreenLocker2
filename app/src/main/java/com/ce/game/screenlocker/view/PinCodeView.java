@@ -41,7 +41,7 @@ public class PinCodeView extends RelativeLayout implements View.OnTouchListener
 
     protected volatile int mAttemptCount = 0;
 
-    private static final int ATTEMPT_TIMES_ALLOWED = 4;
+    private static final int ATTEMPT_TIMES_ALLOWED = Integer.MAX_VALUE;
 
     protected String mPinCode;
 

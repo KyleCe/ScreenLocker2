@@ -4,11 +4,13 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
@@ -115,7 +117,6 @@ public class RippleView extends RelativeLayout {
     @Override
     public void draw(Canvas canvas) {
         try {
-            super.draw(canvas);
             if (animationRunning) {
                 if (DURATION <= timer * FRAME_RATE) {
                     if (mAnimationListener != null) {
@@ -140,7 +141,16 @@ public class RippleView extends RelativeLayout {
             if (mAnimationListener != null) {
                 mAnimationListener.onRippleAnimationEnd();
             }
+        }finally {
+            super.draw(canvas);
         }
+    }
+
+    @Override
+    protected void onVisibilityChanged(View changedView, int visibility) {
+        if (!isShown()) paint.setColor(Color.TRANSPARENT);
+
+        super.onVisibilityChanged(changedView, visibility);
     }
 
     @Override
@@ -185,6 +195,11 @@ public class RippleView extends RelativeLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if(paint.getColor() == Color.TRANSPARENT){
+            paint.setColor(rippleColor);
+            paint.setAlpha(PAINT_ALPHA);
+        }
+
         if (gestureDetector.onTouchEvent(event)) {
             animateRipple(event);
             sendClickEvent(false);
