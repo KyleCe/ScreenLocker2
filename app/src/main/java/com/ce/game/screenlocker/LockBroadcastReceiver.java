@@ -1,12 +1,16 @@
 package com.ce.game.screenlocker;
 
+import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera;
+import android.telephony.TelephonyManager;
+import android.util.Log;
 
-import com.ce.game.screenlocker.util.DU;
+import com.ce.game.screenlocker.inter.PhoneStateChange;
 import com.ce.game.screenlocker.util.CoreIntent;
+import com.ce.game.screenlocker.util.DU;
 import com.ce.game.screenlocker.util.LockHelper;
 
 import java.util.concurrent.Future;
@@ -28,6 +32,12 @@ final public class LockBroadcastReceiver extends BroadcastReceiver {
     private FutureRunnable mSupervisorRunnable;
 
     private static final int SCHEDULE_TASK_NUMBER = 3;
+
+    private PhoneStateChange mPhoneStateChangeCallback;
+
+    public void assignPhoneStateChangeCallback(PhoneStateChange phoneStateChangeCallback) {
+        mPhoneStateChangeCallback = phoneStateChangeCallback;
+    }
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -66,6 +76,25 @@ final public class LockBroadcastReceiver extends BroadcastReceiver {
                 LockHelper.INSTANCE.getLockView().batteryChargingAnim();
                 break;
             case Intent.ACTION_SHUTDOWN:
+                break;
+            case "android.intent.action.PHONE_STATE":
+                TelephonyManager tm =
+                        (TelephonyManager) context.getSystemService(Service.TELEPHONY_SERVICE);
+
+                switch (tm.getCallState()) {
+                    case TelephonyManager.CALL_STATE_RINGING:
+                        mPhoneStateChangeCallback.ringing();
+                        Log.i(TAG, "RINGING :" + intent.getStringExtra("incoming_number"));
+                        break;
+                    case TelephonyManager.CALL_STATE_OFFHOOK:
+                        mPhoneStateChangeCallback.offHook();
+                        DU.sd(TAG, "off hook");
+                        break;
+                    case TelephonyManager.CALL_STATE_IDLE:
+                        mPhoneStateChangeCallback.idle();
+                        Log.i(TAG, "incoming IDLE");
+                        break;
+                }
                 break;
             default:
                 break;
@@ -135,7 +164,7 @@ final public class LockBroadcastReceiver extends BroadcastReceiver {
 
     private void refreshBatteryInfo() {
         initScheduleExecutor();
-         mExecutor.scheduleAtFixedRate(new Runnable() {
+        mExecutor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 LockHelper.INSTANCE.getLockView().refreshBattery();
