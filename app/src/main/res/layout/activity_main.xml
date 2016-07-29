@@ -49,4 +49,50 @@
         android:layout_gravity="bottom|center_horizontal"
         android:textAllCaps="false"
         />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/pic_container_xy"
+            android:layout_width="wrap_content"
+            android:layout_height="290dp"
+            android:layout_gravity="start|right|end"
+            android:src="@drawable/lockscreen_icon_camera"
+            android:scaleType="fitXY"
+            />
+        <ImageView
+            android:id="@+id/pic_container_fit_center"
+            android:layout_width="wrap_content"
+            android:layout_height="290dp"
+            android:layout_gravity="start|right|end"
+            android:src="@drawable/lockscreen_icon_camera"
+            android:scaleType="fitCenter"
+            />
+        <ImageView
+            android:id="@+id/pic_container_center_crop"
+            android:layout_width="wrap_content"
+            android:layout_height="290dp"
+            android:layout_gravity="start|right|end"
+            android:src="@drawable/lockscreen_icon_camera"
+            android:scaleType="centerCrop"
+            />
+        <ImageView
+            android:id="@+id/pic_container_center_inside"
+            android:layout_width="wrap_content"
+            android:layout_height="290dp"
+            android:layout_gravity="start|right|end"
+            android:src="@drawable/lockscreen_icon_camera"
+            android:scaleType="centerInside"
+            />
+        <ImageView
+            android:id="@+id/pic_container_center"
+            android:layout_width="wrap_content"
+            android:layout_height="290dp"
+            android:layout_gravity="start|right|end"
+            android:src="@drawable/lockscreen_icon_camera"
+            android:scaleType="center"
+            />
+    </LinearLayout>
+
 </FrameLayout>

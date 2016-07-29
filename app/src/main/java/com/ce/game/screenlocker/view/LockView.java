@@ -10,7 +10,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Process;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
@@ -21,6 +20,7 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -196,18 +196,25 @@ public class LockView extends FrameLayout implements DirectionSlidability {
 
     private static ActionObject sActionObject = ActionObject.normal;
 
+    private ImageView mBackgroundCarrier;
+
+    private LinearLayout mCenterContentParent;
+
     private void init(final Context context) {
         inflate(context, R.layout.screen_lock, this);
 
         this.mContext = context;
 
         mWholeParent = (FrameLayout) findViewById(R.id.whole_parent);
+        mBackgroundCarrier = (ImageView) findViewById(R.id.background_carrier);
 
         backgroundStrategy();
 
 
         mCenterItem = ((ViewStub) findViewById(R.id.lock_home)).inflate();
         setCenterItemDetail();
+
+        mCenterContentParent = (LinearLayout) mCenterItem.findViewById(R.id.center_content_parent_id);
 
 //        mTopItem = ((ViewStub) findViewById(R.id.viewStubTop)).inflate();
 //        mBottomItem = ((ViewStub) findViewById(R.id.lock_password)).inflate();
@@ -396,7 +403,7 @@ public class LockView extends FrameLayout implements DirectionSlidability {
                     toSetBg = BitmapFactory.decodeStream(
                             mContext.getResources().openRawResource(+R.drawable.general_bg));
 
-                sDefaultBG = new BitmapDrawable(mContext.getResources(), toSetBg);
+                sDefaultBG = new BitmapDrawable(toSetBg);
 
                 sBlurredBG = affairs.generateBlurredDrawable(mContext, toSetBg);
             }
@@ -600,13 +607,18 @@ public class LockView extends FrameLayout implements DirectionSlidability {
         if (drawable == null) return;
 
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+//
+//            mWholeParent.setBackgroundDrawable(drawable);
+//        } else {
+//
+//            mWholeParent.setBackground(drawable);
+//        }
+        mBackgroundCarrier.setImageDrawable(drawable);
 
-            mWholeParent.setBackgroundDrawable(drawable);
-        } else {
+        if (mCenterContentParent != null) mCenterContentParent.setBackgroundDrawable(drawable);
 
-            mWholeParent.setBackground(drawable);
-        }
+        mWholeParent.setBackgroundColor(getResources().getColor(R.color.rippleColor));
     }
 
     public void resetPinCodeView() {

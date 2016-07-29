@@ -62,7 +62,13 @@ public class LockAffairs {
 
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-            return BitmapFactory.decodeFile(file.getAbsolutePath(), options);
+
+            Bitmap origin = BitmapFactory.decodeFile(file.getAbsolutePath(), options);
+
+            // This will scale it to your screen width and height. you need to pass screen width and height.
+            origin = Bitmap.createScaledBitmap(origin, 1080, 1920, false);
+
+            return origin;
         } catch (Throwable th) {
             Log.e(TAG, th.toString());
             return null;

@@ -5,12 +5,24 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.os.Process;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+
+import com.ce.game.screenlocker.util.DU;
+import com.ce.game.screenlocker.util.LockAffairs;
 
 public class MainActivity extends Activity {
 
@@ -45,7 +57,63 @@ public class MainActivity extends Activity {
 
         }.start();
 
+        mConatainerXY = (ImageView) findViewById(R.id.pic_container_xy);
+        mConatainerCenter = (ImageView) findViewById(R.id.pic_container_center);
+        mConatainerCrop = (ImageView) findViewById(R.id.pic_container_center_crop);
+        mConatainerCenterInside = (ImageView) findViewById(R.id.pic_container_center_inside);
+        mConatainerFitCenter = (ImageView) findViewById(R.id.pic_container_fit_center);
 
+        requestPermissionOrStartServiceDirectly();
+
+        DU.execute(new Runnable() {
+            @Override
+            public void run() {
+                Process.setThreadPriority(Process.THREAD_PRIORITY_MORE_FAVORABLE);
+
+                LockAffairs affairs = new LockAffairs();
+
+                Bitmap toSetBg = affairs.parseCustomBackground(mContext);
+
+                if (toSetBg == null)
+                    toSetBg = BitmapFactory.decodeStream(
+                            mContext.getResources().openRawResource(+R.drawable.general_bg));
+
+                sDefaultBG = new BitmapDrawable(toSetBg);
+
+                sBlurredBG = affairs.generateBlurredDrawable(mContext, toSetBg);
+
+                Message msg = new Message();
+                msg.obj = sDefaultBG;
+                mHandler.sendMessage(msg);
+            }
+        });
+    }
+
+    private Drawable sDefaultBG;
+    private Drawable sBlurredBG;
+    private ImageView mConatainerCenter ;
+    private ImageView mConatainerCrop ;
+    private ImageView mConatainerCenterInside;
+    private ImageView mConatainerFitCenter ;
+    private ImageView mConatainerXY;
+
+    Handler mHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            Object obj = msg.obj;
+            if(obj instanceof Drawable){
+                Drawable drawable = (Drawable) msg.obj;
+                mConatainerXY.setImageDrawable(drawable);
+                mConatainerCenter .setImageDrawable(drawable);
+                mConatainerCrop .setImageDrawable(drawable);
+                mConatainerCenterInside.setImageDrawable(drawable);
+                mConatainerFitCenter .setImageDrawable(drawable);
+            }
+        }
+    };
+
+    private void requestPermissionOrStartServiceDirectly() {
         if (Build.VERSION.SDK_INT >= 23 && noReadWriteExternalStorage())
             ActivityCompat.requestPermissions(MainActivity.this
                     , PERMISSION_REQUEST_STRINGS, REQUEST_PERMISSION);
